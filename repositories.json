@@ -90,7 +90,7 @@
         "9536bc43fa66beb1a89fad20030156c49ad4e982"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_src",
@@ -117,7 +117,7 @@
         "6153d21e9a5d6f0a6718757dcf9c5cadf60fe595"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_chrome_test_canvas_bench",
@@ -126,7 +126,7 @@
         "a7b40ea5ae0239517d78845a5fc9b12976bfc732"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_chrome_test_frame_rate",
@@ -135,7 +135,7 @@
         "c10272c88463efeef6bb19c9ec07c42bc8fe22b9"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_chrome_test_xr",
@@ -144,7 +144,7 @@
         "c58ae99b9ff9e2aa4c524633519570bf33536248"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_docs_website",
@@ -153,7 +153,7 @@
         "3c47b51f67014f243237e0f73c4572944030b4e5"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_cdm",
@@ -162,7 +162,7 @@
         "a4cbc4325e6de42ead733f2af43c08292d0e65a8"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_quiche",
@@ -171,7 +171,7 @@
         "dd5f831424b2b60023028f7081634022e0cc7535"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_fuzzer_wasm_corpus",
@@ -180,7 +180,7 @@
         "1df5e50a45db9518a56ebb42cb020a94a090258b"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_angle",
@@ -198,7 +198,7 @@
         "74b1c1d8ea3f30af1b9a76fadcdf9d469afc2a57"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_angle_glmark2",
@@ -207,7 +207,7 @@
         "6edcf02205fd1e8979dc3f3964257a81959b80c8"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_angle_rapidjson",
@@ -216,7 +216,7 @@
         "781a4e667d84aeedbeb8184b7b62425ea66ec59f"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_anonymous-tokens",
@@ -225,7 +225,7 @@
         "50e04fb27eacd49a5e2bfde5977ac689e13ebeeb"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_boringssl",
@@ -234,7 +234,7 @@
         "b94d71f87ff943a617d77f3ff029f9a01a1ec6bc"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_breakpad",
@@ -243,7 +243,7 @@
         "d0b41ca2a38c7b14c4b7853254eb5bf3b4039691"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_cast_core",
@@ -252,7 +252,7 @@
         "f5ee589bdaea60418f670fa176be15ccb9a34942"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_catapult",
@@ -261,7 +261,7 @@
         "a202c86635d505fa893d73bad1e220a66bb644e6"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_ced",
@@ -270,7 +270,7 @@
         "ba412eaaacd3186085babcd901679a48863c7dd5"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_clang-format",
@@ -279,7 +279,7 @@
         "c2725e0622e1a86d55f14514f2177a39efea4a0e"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_cld_3",
@@ -288,7 +288,7 @@
         "b48dc46512566f5a2d41118c8c1116c4f96dc661"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_colorama",
@@ -297,7 +297,7 @@
         "3de9f013df4b470069d03d250224062e8cf15c49"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_compiler-rt",
@@ -306,7 +306,7 @@
         "cb2de163a470f2e9d56ec8a4f912f644378b7191"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_content_analysis_sdk",
@@ -315,7 +315,7 @@
         "9a408736204513e0e95dd2ab3c08de0d95963efc"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_cpu_features",
@@ -324,7 +324,7 @@
         "936b9ab5515dead115606559502e3864958f7f6e"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_cpuinfo",
@@ -333,7 +333,7 @@
         "161a9ec374884f4b3e85725cb22e05f9458fdc93"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_crabbyavif",
@@ -342,7 +342,7 @@
         "640d2758f8d2e59d1a55ae0933673f0f65de68c4"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_crc32c",
@@ -351,7 +351,7 @@
         "d3d60ac6e0f16780bcfcc825385e1d338801a558"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_cros_components",
@@ -360,7 +360,7 @@
         "7ccdbf60606671c2c057628125908fbfef9bd0c8"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_cros_system_api",
@@ -369,7 +369,7 @@
         "5f1ffac5e855229e27c6e4356ffb189f3010283f"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_crossbench",
@@ -378,7 +378,7 @@
         "77240be1ccd1dc99b73be332223a8856641a2073"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_web-tests",
@@ -387,7 +387,7 @@
         "3c76c8201f0732fe9781742229ab8ac43bf90cbf"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_dav1d",
@@ -396,7 +396,7 @@
         "fcbc3d1b93f91c709293ed9faea8b7cbcac9030b"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_dawn",
@@ -414,7 +414,7 @@
         "3f85295cfc982e5447f9faaa36f345366faca11d"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_directx-headers",
@@ -423,7 +423,7 @@
         "980971e835876dc0cde415e8f9bc646e64667bf7"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_glfw",
@@ -432,7 +432,7 @@
         "b35641f4a3c62aa86a0b3c983d163bc0fe36026d"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_egl-registry",
@@ -441,7 +441,7 @@
         "7dea2ed79187cd13f76183c4b9100159b9e3e071"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_opengl-registry",
@@ -450,7 +450,7 @@
         "5bae8738b23d06968e7c3a41308568120943ae77"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_webgpu_cts",
@@ -459,7 +459,7 @@
         "ecd2f1963e1c4c31beb579e99d6ba144ae1e01b2"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_webgpu-headers",
@@ -468,7 +468,7 @@
         "079d4e5153eaabc4033584cc399c27f1acbb2548"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_depot_tools",
@@ -477,7 +477,7 @@
         "6182daef96f6bcf4a61afcba676e87f871d0423f"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_devtools_frontend",
@@ -486,7 +486,7 @@
         "31bb4e203f0bf83335578f43e00cccaac9ff0f28"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_dom_distiller_js",
@@ -495,7 +495,7 @@
         "b619b54601ad02e4ba396f40ad5cbd8a57b20ef7"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_domato",
@@ -504,7 +504,7 @@
         "053714bccbda79cf76dac3fee48ab2b27f21925e"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_dragonbox",
@@ -513,7 +513,7 @@
         "6c7c925b571d54486b9ffae8d9d18a822801cbda"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_eigen3",
@@ -1035,7 +1035,7 @@
         "c5f78b119a5c68153a41ca0fff8ebf98a87f23be"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_buildtools",
@@ -1161,7 +1161,7 @@
         "97355b69daee73d74ac38f2227788458bd95d372"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_securemessage",
@@ -1476,7 +1476,7 @@
         "c05fbbf156230982aa576373da6ee04378b09ca0"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "third_party_openvpn",
@@ -1485,7 +1485,7 @@
         "dc1f569087135894ac2703aeabd7a960ee9452d4"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "qemu_tool_gn",
@@ -1494,7 +1494,16 @@
         "6e0b557db44b3c164094e57687d20ba036a80667"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
+    },
+    {
+      "name": "qemu_sdk_llvm15",
+      "upstream_url": "https://github.com/openharmony/third_party_llvm-project.git",
+      "baseline_revisions": [
+        "3f002d04ba6b3a7659c601207c89d3a896b82546"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
     },
     {
       "name": "qemu_dep_sherpa_onnx",
@@ -1654,6 +1663,15 @@
       "upstream_url": "https://gitcode.com/openharmony/third_party_bounds_checking_function.git",
       "baseline_revisions": [
         "2ae82839ecaaa7d031e66ccbd2076d671acfd615"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
+      "name": "qemu_dep_mesa3d_21_3",
+      "upstream_url": "https://gitcode.com/openharmony/third_party_mesa3d.git",
+      "baseline_revisions": [
+        "995d2506d18924b48db0cf40e6ad7de04fc4e558"
       ],
       "large_files": "git-lfs",
       "enabled": true
