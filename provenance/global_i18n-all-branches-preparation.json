@@ -1,0 +1,15 @@
+{
+  "repository": "openharmony-qemu/global_i18n",
+  "workflow_url": "https://github.com/openharmony-qemu/mirror-sync/actions/runs/43417519894",
+  "upstream_branches": 326,
+  "baseline_original_refs": {
+    "refs/heads/upstream/baseline-7.0": "76e82e29f33b717b0346e2c549b8805c083ea2ad"
+  },
+  "baseline_hosted_refs": {
+    "refs/heads/upstream/baseline-7.0": "2de137865a7fccde02bbae499108cb50da3cb95c"
+  },
+  "source_preparation_verified": true,
+  "destination_publication_verified": false,
+  "build_validated": false,
+  "runtime_validated": false
+}

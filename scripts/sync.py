@@ -81,8 +81,12 @@ def publish(root, destination, incoming, reporter, repository):
         old = current.get(ref)
         item = dict(ref=ref, old=old, new=new)
         reason = None
+        blockers = [existing for existing in current
+                    if existing.startswith(ref + '/') or ref.startswith(existing + '/')]
         if protected(ref):
             reason = 'Upstream uses a reserved QEMU development branch name.'
+        elif blockers:
+            reason = 'Branch namespace conflicts with destination refs: ' + ', '.join(sorted(blockers))
         elif old == new:
             item['status'] = 'unchanged'
         elif old:
@@ -99,14 +103,18 @@ def publish(root, destination, incoming, reporter, repository):
             if pushed.returncode:
                 # Only a ref race is a branch conflict. Authentication, quota and
                 # other transport errors fail the job with their actual diagnostics.
-                observed = refs(root, destination).get(ref)
-                if observed != old:
+                after = refs(root, destination)
+                observed = after.get(ref)
+                blocked = any(existing.startswith(ref + '/') or ref.startswith(existing + '/')
+                              for existing in after)
+                if observed != old or blocked:
                     reason = 'Destination changed during synchronization; retry after review.'
                     item['old'] = observed
                 else:
                     raise RuntimeError(pushed.stderr[-4000:] + pushed.stdout[-1000:])
             else:
                 item['status'] = 'created' if old is None else 'updated'
+                current[ref] = new
         if reason:
             item['status'] = 'conflict'
             item['issue'] = reporter.report(repository, ref, item['old'], new, reason)

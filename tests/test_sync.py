@@ -97,6 +97,15 @@ class MirrorTests(unittest.TestCase):
         self.assertNotIn('refs/heads/OpenHarmony-7.0-Release-qemu', refs(self.source, str(self.destination)))
         self.assertEqual(len(self.reporter.calls), 1)
 
+    def test_branch_namespace_conflict_is_reported_without_deletion(self):
+        self.sync()
+        git(self.destination, 'update-ref', 'refs/heads/blocked/child', self.first)
+        git(self.source, 'branch', 'blocked')
+        result = self.sync()
+        self.assertEqual(next(r['status'] for r in result if r['ref'] == 'refs/heads/blocked'), 'conflict')
+        self.assertIn('namespace', self.reporter.calls[0][4])
+        self.assertIn('refs/heads/blocked/child', refs(self.source, str(self.destination)))
+
     def test_git_lfs_migration_is_repeatable(self):
         # Exercise conversion with real historical oversized content, even though
         # it is deleted at the current tip. Repeated runs must not create conflicts.
