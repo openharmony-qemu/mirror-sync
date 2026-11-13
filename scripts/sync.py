@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Synchronize all official branches without force pushes or destination deletion."""
 import argparse
-import concurrent.futures
 import hashlib
 import json
 import os
@@ -17,8 +16,7 @@ import urllib.request
 CONTROL = 'openharmony-qemu/mirror-sync'
 BOOTSTRAP_COMMITS = 10000
 RECOVERY_COMMITS = 500
-TRANSFER_BYTES = 128 * 1024 * 1024
-TRANSFER_WORKERS = 4
+TRANSFER_BYTES = 512 * 1024 * 1024
 TRANSFER_PREFIX = 'refs/tags/mirror-sync-transfer/'
 
 
@@ -43,7 +41,9 @@ def protected(ref):
 def transient_transport(diagnostic):
     return bool(re.search(r'HTTP (500|502|503|504)\b', diagnostic) or
         any(term in diagnostic.lower() for term in
-            ('unexpected disconnect', 'remote end hung up', 'connection reset', 'timed out')))
+            ('unexpected disconnect', 'remote end hung up', 'connection reset', 'timed out')) or
+        ('remote unpack failed: index-pack failed' in diagnostic
+         and '/objects/ghq_' in diagnostic and 'No such file or directory' in diagnostic))
 
 
 def transfer_refs(root, destination):
@@ -82,7 +82,7 @@ def transfer_blobs(root, destination, ref, new, lfs_complete):
                    if (parts := line.split())[1] == 'blob')
     total_bytes = sum(size for _, size in blobs)
     print(f'{ref}: staging plan: {len(blobs)} original blobs, {total_bytes} bytes, '
-          f'batch content limit {TRANSFER_BYTES} bytes, at most {TRANSFER_WORKERS} uploads', flush=True)
+          f'batch content limit {TRANSFER_BYTES} bytes', flush=True)
     environment = dict(os.environ)
     if lfs_complete:
         environment['GIT_LFS_SKIP_PUSH'] = '1'
@@ -102,34 +102,19 @@ def transfer_blobs(root, destination, ref, new, lfs_complete):
                 raise RuntimeError(pushed.stderr[-4000:] + pushed.stdout[-1000:])
             time.sleep(3 * (attempt + 1))
 
-    # Only immutable object packs are concurrent. Join every upload before the
-    # caller rechecks the destination branch and attempts its normal ref update.
-    # Failure preserves accepted temporary tags for the next run to resume.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=TRANSFER_WORKERS) as pool:
-        pending = set()
-
-        def submit(batch):
-            nonlocal pending
-            if len(pending) >= TRANSFER_WORKERS:
-                done, pending = concurrent.futures.wait(
-                    pending, return_when=concurrent.futures.FIRST_COMPLETED)
-                for future in done:
-                    future.result()
-            pending.add(pool.submit(upload, batch))
-
-        batch, size = [], 0
-        for blob in blobs:
-            if blob[1] > TRANSFER_BYTES:
-                raise RuntimeError('An individual source blob exceeds the bounded transfer size')
-            if batch and size + blob[1] > TRANSFER_BYTES:
-                submit(batch)
-                batch, size = [], 0
-            batch.append(blob)
-            size += blob[1]
-        if batch:
-            submit(batch)
-        for future in pending:
-            future.result()
+    # GitHub rejected concurrent receives with missing quarantine pack files in
+    # production. Serialize uploads and reduce round trips with larger batches.
+    batch, size = [], 0
+    for blob in blobs:
+        if blob[1] > TRANSFER_BYTES:
+            raise RuntimeError('An individual source blob exceeds the bounded transfer size')
+        if batch and size + blob[1] > TRANSFER_BYTES:
+            upload(batch)
+            batch, size = [], 0
+        batch.append(blob)
+        size += blob[1]
+    if batch:
+        upload(batch)
     print(f'{ref}: original blob staging complete ({len(blobs)} blobs, {total_bytes} bytes)',
           flush=True)
     return len(blobs)

@@ -4,7 +4,6 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
-import threading
 import unittest
 from unittest.mock import patch
 
@@ -409,17 +408,15 @@ class MirrorTests(unittest.TestCase):
         self.assertEqual(next(row['status'] for row in result if row['ref'] == 'refs/heads/main'), 'conflict')
         self.assertTrue(sync_module.transfer_refs(self.source, str(self.destination)))
 
-    def test_parallel_object_upload_failure_preserves_the_branch_and_resumes(self):
+    def test_object_upload_failure_preserves_the_branch_and_resumes(self):
         self.entry['bounded_transfer'] = True
         self.sync()
         for index in range(9):
             (self.source / f'asset-{index}').write_bytes(os.urandom(1024))
         git(self.source, 'add', '.')
-        git(self.source, 'commit', '-m', 'parallel source snapshot')
+        git(self.source, 'commit', '-m', 'source snapshot')
         incoming = git(self.source, 'rev-parse', 'HEAD')
         real_git = sync_module.git
-        barrier = threading.Barrier(4)
-        lock = threading.Lock()
         calls = 0
         resumed = 0
         interrupted = True
@@ -429,34 +426,53 @@ class MirrorTests(unittest.TestCase):
             staging = (args[0] == 'push' and any(sync_module.TRANSFER_PREFIX in arg
                        and not arg.startswith((':', '--')) for arg in args))
             if staging and interrupted:
-                with lock:
-                    sequence = calls
-                    calls += 1
-                if sequence < 4:
-                    barrier.wait(timeout=30)
-                if sequence == 0:
+                calls += 1
+                if calls == 2:
                     return subprocess.CompletedProcess(args, 1, '', 'injected object upload rejection')
             elif staging:
-                with lock:
-                    resumed += 1
+                resumed += 1
             return real_git(root, *args, **kwargs)
 
         with patch.object(sync_module, 'TRANSFER_BYTES', 2048), \
              patch.object(sync_module, 'git', side_effect=interrupted_upload):
             with self.assertRaisesRegex(RuntimeError, 'injected object upload rejection'):
                 self.sync()
-            # Another upload can finish and admit the fifth batch before the
-            # rejection's remote read-back completes. Both schedules are valid.
-            self.assertIn(calls, (4, 5))
+            self.assertEqual(calls, 2)
             self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], self.first)
             accepted = len(sync_module.transfer_refs(self.source, str(self.destination)))
-            self.assertIn(accepted, (3, 4))
+            self.assertEqual(accepted, 1)
             self.assertEqual(self.reporter.calls, [])
             interrupted = False
             result = self.sync()
         self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], incoming)
         self.assertEqual(resumed, 5 - accepted)
         self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
+        self.assertFalse(any(row['status'] == 'conflict' for row in result))
+
+    def test_missing_remote_quarantine_pack_is_retried_without_a_branch_conflict(self):
+        self.entry['bounded_transfer'] = True
+        self.sync()
+        incoming = self.commit('source update after transient server failure')
+        real_git = sync_module.git
+        failed = False
+
+        def flaky_server(root, *args, **kwargs):
+            nonlocal failed
+            if not failed and args[0] == 'push' and any(
+                    sync_module.TRANSFER_PREFIX in arg for arg in args):
+                failed = True
+                return subprocess.CompletedProcess(args, 1, '',
+                    'remote: error: unable to write file /objects/ghq_example/pack/pack-file.pack: '
+                    'No such file or directory\nerror: remote unpack failed: index-pack failed')
+            return real_git(root, *args, **kwargs)
+
+        with patch.object(sync_module, 'git', side_effect=flaky_server), \
+             patch.object(sync_module.time, 'sleep'):
+            result = self.sync()
+        self.assertTrue(failed)
+        self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], incoming)
+        self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
+        self.assertEqual(self.reporter.calls, [])
         self.assertFalse(any(row['status'] == 'conflict' for row in result))
 
     def test_unexpected_transfer_tag_is_preserved(self):
