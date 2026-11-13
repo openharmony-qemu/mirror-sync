@@ -89,7 +89,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mirror-evidence-${{ matrix.repository }}
+          name: mirror-evidence-${{ matrix.repository }}-attempt-${{ github.run_attempt }}
           path: reports/
           if-no-files-found: warn
           retention-days: 90

@@ -1,0 +1,23 @@
+{
+  "repository": "openharmony-qemu/global_i18n",
+  "workflow_url": "https://github.com/openharmony-qemu/mirror-sync/actions/runs/43434255062",
+  "attempt": 2,
+  "artifact_id": 14042034076,
+  "app_id": 5744796,
+  "installation_id": 181600473,
+  "upstream_branches": 326,
+  "results": {
+    "created": 326,
+    "unchanged": 1
+  },
+  "remote_refs_verified": true,
+  "qemu_branch_unchanged": "13c1315d0825903a47ac9c29ecab41d1556633d5",
+  "baseline_original_refs": {
+    "refs/heads/upstream/baseline-7.0": "76e82e29f33b717b0346e2c549b8805c083ea2ad"
+  },
+  "baseline_hosted_refs": {
+    "refs/heads/upstream/baseline-7.0": "2de137865a7fccde02bbae499108cb50da3cb95c"
+  },
+  "build_validated": false,
+  "runtime_validated": false
+}

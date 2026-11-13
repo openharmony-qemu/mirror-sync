@@ -119,6 +119,7 @@ def publish(root, destination, incoming, reporter, repository):
             item['status'] = 'conflict'
             item['issue'] = reporter.report(repository, ref, item['old'], new, reason)
         results.append(item)
+        print(f'{repository} {ref}: {item["status"]}', flush=True)
     return results
 
 
@@ -129,6 +130,7 @@ def prepare(entry, root, report_dir, destination=None):
     git(root, 'init', '--bare')
     git(root, 'remote', 'add', 'upstream', upstream)
     git(root, 'remote', 'add', 'destination', destination)
+    print(entry['name'] + ': fetching every upstream branch', flush=True)
     git(root, 'fetch', '--no-tags', 'upstream', '+refs/heads/*:refs/heads/*')
     original = refs(root, 'upstream')
     # Fail rather than publishing a partial snapshot if upstream moved during fetch.
@@ -136,6 +138,7 @@ def prepare(entry, root, report_dir, destination=None):
                    git(root, 'for-each-ref', '--format=%(objectname) %(refname)', 'refs/heads').stdout.splitlines())
     if original != fetched:
         raise RuntimeError('Upstream branch inventory changed while fetching; retry the job.')
+    print(f'{entry["name"]}: fetched {len(original)} upstream branches', flush=True)
     baseline_refs = {}
     for index, revision in enumerate(entry.get('baseline_revisions', [])):
         if git(root, 'cat-file', '-e', revision + '^{commit}', check=False).returncode:
@@ -147,6 +150,7 @@ def prepare(entry, root, report_dir, destination=None):
         baseline_refs[ref] = revision
     report_dir.mkdir(parents=True, exist_ok=True)
     if entry.get('large_files') == 'git-lfs':
+        print(entry['name'] + ': converting oversized historical blobs to LFS', flush=True)
         mapping = report_dir / 'commit-map.csv'
         mapping.unlink(missing_ok=True)
         git(root, 'lfs', 'migrate', 'import', '--everything', '--skip-fetch',
@@ -162,7 +166,9 @@ def prepare(entry, root, report_dir, destination=None):
 def finish(entry, root, report_dir, reporter):
     report = json.loads((report_dir / 'provenance.json').read_text())
     if entry.get('large_files') == 'git-lfs':
+        print(entry['name'] + ': uploading LFS objects before branch publication', flush=True)
         git(root, 'lfs', 'push', '--all', 'destination')
+        print(entry['name'] + ': LFS upload complete', flush=True)
     results = publish(root, 'destination', report['hosted_refs'], reporter, report['repository'])
     report['results'] = results
     (report_dir / 'result.json').write_text(json.dumps(report, indent=2) + '\n')
