@@ -738,7 +738,7 @@
         "69015643b3f68dbd438c010439c59adc52cac808"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_jetstream",
@@ -747,7 +747,7 @@
         "f88580ef6265b59295f37eb0c6666466b11a0e74"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_jsoncpp",
@@ -756,7 +756,7 @@
         "42e892d96e47b1f6e29844cc705e148ec4856448"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_leveldatabase",
@@ -765,7 +765,7 @@
         "4ee78d7ea98330f7d7599c42576ca99e3c6ff9c5"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libFuzzer",
@@ -774,7 +774,7 @@
         "bea408a6e01f0f7e6c82a43121fe3af4506c932e"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libaddressinput",
@@ -783,7 +783,7 @@
         "0c7e9434dc08d2f3ee0a912567340b6f207e5488"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libaom",
@@ -792,7 +792,7 @@
         "5afceb5c874e7aa278ee524f2fc7f08bbacad1df"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_buildtools_libcpp",
@@ -801,7 +801,7 @@
         "07572e7b169225ef3a999584cba9d9004631ae66"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_buildtools_libcppapi",
@@ -810,7 +810,7 @@
         "83a852080747b9a362e8f9e361366b7a601f302c"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libdrm",
@@ -819,7 +819,7 @@
         "ad78bb591d02162d3b90890aa4d0a238b2a37cde"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libgav1",
@@ -828,7 +828,7 @@
         "c05bf9be660cf170d7c26bd06bb42b3322180e58"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_libipp",
@@ -837,7 +837,7 @@
         "4be5f77f672a3a9f1bbf3c935fb0ea8b3f86ce61"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libjpeg_turbo",
@@ -846,7 +846,7 @@
         "4a25a308a1f30767de80386cfb77a6267be97302"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_liblouis",
@@ -855,7 +855,7 @@
         "9700847afb92cb35969bdfcbbfbbb74b9c7b3376"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libphonenumber",
@@ -864,7 +864,7 @@
         "9d46308f313f2bf8dbce1dfd4f364633ca869ca7"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libprotobuf_mutator",
@@ -873,7 +873,7 @@
         "7bf98f78a30b067e22420ff699348f084f802e12"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libsrtp",
@@ -882,7 +882,7 @@
         "a52756acb1c5e133089c798736dd171567df11f5"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libsync",
@@ -891,7 +891,7 @@
         "fcb40c9ae8ea5738b3a9d5e8df696ef729e17fde"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_buildtools_libunwind",
@@ -900,7 +900,7 @@
         "c65639bf792928e0d38aed822dc34d3e72066a6c"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_libva-fake-driver",
@@ -909,7 +909,7 @@
         "a9bcab9cd6b15d4e3634ca44d5e5f7652c612194"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libvpx",
@@ -918,7 +918,7 @@
         "01c36277c0d0e6fbb54ce1f0dde08266cddce748"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libwebm",
@@ -927,7 +927,7 @@
         "8c75fdb5a93e9449272904b68f7baa15e7a4180b"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_libwebp",
@@ -936,7 +936,7 @@
         "c00d83f6642e7838a12bb03bca94237f03cc2e00"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_libyuv",
@@ -945,7 +945,7 @@
         "8c791052ce648e45e73ee4467440946bf1d08caa"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_libc",
@@ -954,7 +954,7 @@
         "fe97633934c21742a74962d52c17b3bcba7ad824"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_lss",
@@ -963,7 +963,7 @@
         "639c8b9a1dbf3aab5030ae04eb2e243f98d3ce8d"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_material-color-utilities",
@@ -972,7 +972,7 @@
         "13434b50dcb64a482cc91191f8cf6151d90f5465"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_minigbm",
@@ -981,7 +981,7 @@
         "3018207f4d89395cc271278fb9a6558b660885f5"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_nasm",
@@ -990,7 +990,7 @@
         "af5eeeb054bebadfbb79c7bcd100a95e2ad4525f"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_nearby-connections",
@@ -999,7 +999,7 @@
         "0bad8b0c9877f92eeeb550654f1ea51a71a085e4"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_neon_2_sse",
@@ -1008,7 +1008,7 @@
         "eb8b80b28f956275e291ea04a7beb5ed8289e872"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_oak",
@@ -1017,7 +1017,7 @@
         "96c00a6c99ac382f3f3a8f376bc7a70890d1adaa"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_openh264",
@@ -1026,7 +1026,7 @@
         "652bdb7719f30b52b08e506645a7322ff1b2cc6f"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_openscreen",
@@ -1044,7 +1044,7 @@
         "fba2905150c974240f14aa5334c3e5c93f873032"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_openscreen_tinycbor",
@@ -1053,7 +1053,7 @@
         "fc42a049853b802e45f49588f8148fc29d7b4d9c"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_ots",
@@ -1062,7 +1062,7 @@
         "46bea9879127d0ff1c6601b078e2ce98e83fcd33"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_pdfium",
@@ -1071,7 +1071,7 @@
         "f467ad7b6de4e6026a8c70f9a4f840fc9a3de4dd"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_perfetto",
@@ -1080,7 +1080,7 @@
         "bf7c3ad9e9698ded537c2f068c2b1132ac77a22c"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_protobuf-javascript",
@@ -1089,7 +1089,7 @@
         "e6d763860001ba1a76a63adcff5efb12b1c96024"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_pthreadpool",
@@ -1098,7 +1098,7 @@
         "d90cd6f1493e09d12c407243f7f331a8cda55efb"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_pyelftools",
@@ -1107,7 +1107,7 @@
         "19b3e610c86fcadb837d252c794cb5e8008826ae"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_pywebsocket3",
@@ -1116,7 +1116,7 @@
         "50602a14f1b6da17e0b619833a13addc6ea78bc2"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_quic_trace",
@@ -1125,7 +1125,7 @@
         "352288a06d2c83ae68b5a402b2219f4678be9f39"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_re2",
@@ -1134,7 +1134,7 @@
         "e7aec5985072c1dbe735add802653ef4b36c231a"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_readability",
@@ -1143,7 +1143,7 @@
         "d7949dc47dd9ed9ee1d3b34ffdcf3bce28cde435"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_ruy",
@@ -1152,7 +1152,7 @@
         "1e6e50872655a73b5250f954d7b9da9a87292fd3"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_search_engines_data",
@@ -1170,7 +1170,7 @@
         "fa07beb12babc3b25e0c5b1f38c16aa8cb6b8f84"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_skia",
@@ -1179,7 +1179,7 @@
         "e742cbf7a397b11aef80c664999b758fb8d01a58"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_smhasher",
