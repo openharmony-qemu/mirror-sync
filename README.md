@@ -29,7 +29,8 @@
 | `large_files` | `git-lfs` 表示将超过 99 MB 的历史文件转换到 Git LFS |
 | `baseline_revisions` | 可选的固定上游提交，同时保留为基线引用 |
 
-目标仓库需要提前创建。使用 GitHub App 授权写入，每个任务只申请对应目标仓库的
+目标仓库需要提前创建，并关闭其 GitHub Actions，避免镜像推送触发上游构建工作流。
+本仓库的 Actions 保持启用。使用 GitHub App 授权写入，每个任务只申请对应目标仓库的
 短期 token。安装和配置步骤见 [APP_SETUP.md](APP_SETUP.md)。
 
 ## 使用
