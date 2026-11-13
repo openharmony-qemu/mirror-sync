@@ -9,13 +9,15 @@ import re
 import shlex
 import subprocess
 import sys
+import time
 import urllib.request
 
 CONTROL = 'openharmony-qemu/mirror-sync'
 
 
-def git(root, *args, check=True):
+def git(root, *args, check=True, input_text=None, environment=None):
     result = subprocess.run(['git', '-C', str(root), *args], text=True,
+                            input=input_text, env=environment,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if check and result.returncode:
         raise RuntimeError(result.stderr[-4000:])
@@ -75,7 +77,7 @@ class Issues:
         return issue['number']
 
 
-def publish(root, destination, incoming, reporter, repository):
+def publish(root, destination, incoming, reporter, repository, lfs_complete=False):
     """Test ancestry before each normal push; a racing writer cannot be overwritten."""
     current = refs(root, destination)
     results = []
@@ -101,20 +103,38 @@ def publish(root, destination, incoming, reporter, repository):
             if ancestor.returncode == 1:
                 reason = 'Non-fast-forward branch update (upstream rewrite or local divergence).'
         if not reason and 'status' not in item:
-            pushed = git(root, 'push', '--porcelain', destination, new + ':' + ref, check=False)
-            if pushed.returncode:
+            environment = dict(os.environ)
+            if lfs_complete:
+                # Every object was uploaded before any ref. Re-running the LFS
+                # pre-push history scan for each branch adds no data protection.
+                environment['GIT_LFS_SKIP_PUSH'] = '1'
+            for attempt in range(3):
+                pushed = git(root, 'push', '--porcelain', destination, new + ':' + ref,
+                             check=False, environment=environment)
+                if pushed.returncode == 0:
+                    break
                 # Only a ref race is a branch conflict. Authentication, quota and
                 # other transport errors fail the job with their actual diagnostics.
                 after = refs(root, destination)
                 observed = after.get(ref)
                 blocked = any(existing.startswith(ref + '/') or ref.startswith(existing + '/')
                               for existing in after)
+                if observed == new:
+                    # The server may commit the ref before its response is lost.
+                    break
                 if observed != old or blocked:
                     reason = 'Destination changed during synchronization; retry after review.'
                     item['old'] = observed
-                else:
+                    break
+                diagnostic = pushed.stderr + pushed.stdout
+                transient = (re.search(r'HTTP (500|502|503|504)\b', diagnostic) or
+                    any(term in diagnostic.lower() for term in
+                        ('unexpected disconnect', 'remote end hung up', 'connection reset', 'timed out')))
+                if not transient or attempt == 2:
                     raise RuntimeError(pushed.stderr[-4000:] + pushed.stdout[-1000:])
-            else:
+                print(f'{repository} {ref}: transient transport failure; retrying', flush=True)
+                time.sleep(3 * (attempt + 1))
+            if not reason:
                 item['status'] = 'created' if old is None else 'updated'
                 current[ref] = new
         if reason:
@@ -123,6 +143,18 @@ def publish(root, destination, incoming, reporter, repository):
         results.append(item)
         print(f'{repository} {ref}: {item["status"]}', flush=True)
     return results
+
+
+def cached_lfs_objects(root):
+    settings = git(root, 'lfs', 'env').stdout.splitlines()
+    locations = [line.split('=', 1)[1] for line in settings if line.startswith('LocalMediaDir=')]
+    if len(locations) != 1:
+        raise ValueError('Cannot locate the prepared LFS object store')
+    return sorted(path.name for path in Path(locations[0]).glob('*/*/*')
+                  if path.is_file() and not path.is_symlink()
+                  and re.fullmatch('[0-9a-f]{64}', path.name)
+                  and path.parent.name == path.name[2:4]
+                  and path.parent.parent.name == path.name[:2])
 
 
 def prepare(entry, root, report_dir, destination=None):
@@ -161,6 +193,8 @@ def prepare(entry, root, report_dir, destination=None):
     hosted = {ref: git(root, 'rev-parse', ref).stdout.strip() for ref in original | baseline_refs}
     report = dict(repository='openharmony-qemu/' + entry['name'], upstream_url=upstream,
                   original_refs=original, baseline_original_refs=baseline_refs, hosted_refs=hosted)
+    if entry.get('large_files') == 'git-lfs':
+        report['lfs_objects'] = cached_lfs_objects(root)
     (report_dir / 'provenance.json').write_text(json.dumps(report, indent=2) + '\n')
     return report
 
@@ -168,10 +202,16 @@ def prepare(entry, root, report_dir, destination=None):
 def finish(entry, root, report_dir, reporter):
     report = json.loads((report_dir / 'provenance.json').read_text())
     if entry.get('large_files') == 'git-lfs':
-        print(entry['name'] + ': uploading LFS objects before branch publication', flush=True)
-        git(root, 'lfs', 'push', '--all', 'destination')
+        objects = report['lfs_objects']
+        if objects != cached_lfs_objects(root):
+            raise RuntimeError('Prepared LFS objects changed; no branches were published')
+        print(f'{entry["name"]}: uploading {len(objects)} prepared LFS objects before branch publication', flush=True)
+        if objects:
+            git(root, 'lfs', 'push', '--object-id', 'destination', '--stdin',
+                input_text='\n'.join(objects) + '\n')
         print(entry['name'] + ': LFS upload complete', flush=True)
-    results = publish(root, 'destination', report['hosted_refs'], reporter, report['repository'])
+    results = publish(root, 'destination', report['hosted_refs'], reporter, report['repository'],
+                      lfs_complete=entry.get('large_files') == 'git-lfs')
     report['results'] = results
     (report_dir / 'result.json').write_text(json.dumps(report, indent=2) + '\n')
     return results

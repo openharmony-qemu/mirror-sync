@@ -5,9 +5,11 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from sync import Issues, publish, refs, synchronize
+from sync import Issues, cached_lfs_objects, finish, prepare, publish, refs, synchronize
+import sync as sync_module
 
 
 def git(root, *args):
@@ -109,6 +111,11 @@ class MirrorTests(unittest.TestCase):
     def test_git_lfs_migration_is_repeatable(self):
         # Exercise conversion with real historical oversized content, even though
         # it is deleted at the current tip. Repeated runs must not create conflicts.
+        git(self.source, 'lfs', 'install', '--local')
+        git(self.source, 'lfs', 'track', 'upstream-lfs.bin')
+        (self.source / 'upstream-lfs.bin').write_bytes(b'original upstream LFS content')
+        git(self.source, 'add', '.gitattributes', 'upstream-lfs.bin')
+        git(self.source, 'commit', '-m', 'upstream LFS source')
         blob = self.source / 'historical.dat'
         with blob.open('wb') as stream:
             stream.truncate(100_000_001)
@@ -117,8 +124,68 @@ class MirrorTests(unittest.TestCase):
         git(self.source, 'rm', 'historical.dat')
         git(self.source, 'commit', '-m', 'remove historical asset')
         self.entry['large_files'] = 'git-lfs'
-        self.sync()
+        work, reports = self.root / 'explicit-lfs', self.root / 'explicit-reports'
+        work.mkdir()
+        prepare(self.entry, work, reports, str(self.destination))
+        self.assertEqual(len(cached_lfs_objects(work)), 2)
+        # Real Git must bypass the pre-push hook only after the explicit complete
+        # LFS upload; the historical object is absent from the current tip.
+        hook = work / 'hooks/pre-push'
+        hook.write_text('#!/bin/sh\ntest "$GIT_LFS_SKIP_PUSH" = "1"\n')
+        hook.chmod(0o755)
+        finish(self.entry, work, reports, self.reporter)
+        objects = [path for path in (self.destination / 'lfs/objects').glob('*/*/*') if path.is_file()]
+        self.assertEqual(sorted(path.stat().st_size for path in objects), [29, 100_000_001])
         self.assertTrue(all(r['status'] == 'unchanged' for r in self.sync()))
+        self.assertEqual(self.reporter.calls, [])
+
+    def test_missing_prepared_lfs_object_prevents_ref_publication(self):
+        git(self.source, 'lfs', 'install', '--local')
+        git(self.source, 'lfs', 'track', 'asset.bin')
+        (self.source / 'asset.bin').write_bytes(b'locked original asset')
+        git(self.source, 'add', '.gitattributes', 'asset.bin')
+        git(self.source, 'commit', '-m', 'LFS source')
+        self.entry['large_files'] = 'git-lfs'
+        work, reports = self.root / 'missing-lfs', self.root / 'missing-reports'
+        work.mkdir()
+        prepare(self.entry, work, reports, str(self.destination))
+        objects = cached_lfs_objects(work)
+        self.assertEqual(len(objects), 1)
+        oid = objects[0]
+        (work / 'lfs/objects' / oid[:2] / oid[2:4] / oid).unlink()
+        with self.assertRaisesRegex(RuntimeError, 'Prepared LFS objects changed'):
+            finish(self.entry, work, reports, self.reporter)
+        self.assertEqual(refs(self.source, str(self.destination)), {})
+
+    def test_push_readback_accepts_a_lost_success_response(self):
+        real_git = sync_module.git
+        failed = False
+        def lose_response(root, *args, **kwargs):
+            nonlocal failed
+            result = real_git(root, *args, **kwargs)
+            if args[0] == 'push' and not failed:
+                failed = True
+                return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 response lost')
+            return result
+        with patch.object(sync_module, 'git', side_effect=lose_response):
+            result = self.sync()
+        self.assertTrue(failed)
+        self.assertTrue(all(row['status'] == 'created' for row in result))
+        self.assertEqual(self.reporter.calls, [])
+
+    def test_transient_push_failure_retries_without_creating_a_conflict(self):
+        real_git = sync_module.git
+        failed = False
+        def fail_once(root, *args, **kwargs):
+            nonlocal failed
+            if args[0] == 'push' and not failed:
+                failed = True
+                return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 503 temporary service failure')
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'git', side_effect=fail_once), patch.object(sync_module.time, 'sleep'):
+            result = self.sync()
+        self.assertTrue(failed)
+        self.assertTrue(all(row['status'] == 'created' for row in result))
         self.assertEqual(self.reporter.calls, [])
 
 
