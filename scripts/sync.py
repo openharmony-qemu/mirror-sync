@@ -14,6 +14,7 @@ import time
 import urllib.request
 
 CONTROL = 'openharmony-qemu/mirror-sync'
+BOOTSTRAP_COMMITS = 10000
 
 
 def git(root, *args, check=True, input_text=None, environment=None):
@@ -78,17 +79,41 @@ class Issues:
         return issue['number']
 
 
-def publish(root, destination, incoming, reporter, repository, lfs_complete=False):
+def publish(root, destination, incoming, reporter, repository, lfs_complete=False, bootstrap=True):
     """Test ancestry before each normal push; a racing writer cannot be overwritten."""
     current = refs(root, destination)
     environment = dict(os.environ)
     if lfs_complete:
         environment['GIT_LFS_SKIP_PUSH'] = '1'
+    ordered = sorted(incoming, key=lambda ref: (not ref.startswith('refs/heads/upstream/baseline-'), ref))
+    # Populate an empty destination through real ancestor commits. Every step is
+    # a normal fast-forward; no synthetic history or temporary remote refs are
+    # needed. A failed initial transfer can then resume from the accepted prefix.
+    if bootstrap and ordered:
+        first = next((ref for ref in ordered if not protected(ref)), None)
+        old = current.get(first)
+        if first and old != incoming[first] and (not current or old):
+            history = git(root, 'rev-list', '--first-parent', '--reverse', incoming[first]).stdout.splitlines()
+            positions = {sha: index for index, sha in enumerate(history)}
+            checkpoints = history[BOOTSTRAP_COMMITS - 1::BOOTSTRAP_COMMITS] if not current or old in positions else []
+            for checkpoint in checkpoints:
+                if checkpoint == incoming[first]:
+                    break
+                observed = refs(root, destination).get(first)
+                if observed in positions and positions[observed] >= positions[checkpoint]:
+                    continue
+                print(f'{repository}: publishing ancestor checkpoint for {first}: {checkpoint}', flush=True)
+                result = publish(root, destination, {first: checkpoint}, reporter, repository,
+                                 lfs_complete=lfs_complete, bootstrap=False)
+                if any(row['status'] == 'conflict' for row in result):
+                    break
+            current = refs(root, destination)
     # Many upstream release/weekly branches point to the same commit. Publishing
     # those new names together uploads exactly the same history as one ref and
     # avoids a separate authenticated round trip for every branch name.
     groups = {}
-    for ref, new in sorted(incoming.items()):
+    for ref in ordered:
+        new = incoming[ref]
         if (ref not in current and not protected(ref) and not any(
                 existing.startswith(ref + '/') or ref.startswith(existing + '/')
                 for existing in current)):
@@ -110,7 +135,8 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
             # A rejected atomic batch falls through to the existing per-ref
             # checks: preserve conflicting refs and still publish other branches.
     results = []
-    for ref, new in sorted(incoming.items()):
+    for ref in ordered:
+        new = incoming[ref]
         old = None if ref in created else current.get(ref)
         item = dict(ref=ref, old=old, new=new)
         reason = None
@@ -205,6 +231,7 @@ def prepare(entry, root, report_dir, destination=None):
     upstream = entry['upstream_url']
     destination = destination or 'https://github.com/openharmony-qemu/' + entry['name'] + '.git'
     git(root, 'init', '--bare')
+    git(root, 'config', 'http.version', 'HTTP/1.1')
     git(root, 'remote', 'add', 'upstream', upstream)
     git(root, 'remote', 'add', 'destination', destination)
     print(entry['name'] + ': fetching every upstream branch', flush=True)

@@ -244,6 +244,60 @@ class MirrorTests(unittest.TestCase):
         self.assertTrue(all(row['status'] == 'created' for row in result))
         self.assertEqual(self.reporter.calls, [])
 
+    def test_fixed_baseline_is_published_before_an_unrelated_branch_transfer_failure(self):
+        second = self.commit('later upstream')
+        git(self.source, 'branch', '-f', 'feature/nested', second)
+        real_git = sync_module.git
+        def reject_later_commit(root, *args, **kwargs):
+            if args[0] == 'push' and any(arg.startswith(second + ':') for arg in args):
+                return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 transfer failed')
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'git', side_effect=reject_later_commit), \
+             patch.object(sync_module.time, 'sleep'):
+            with self.assertRaisesRegex(RuntimeError, 'HTTP 500'):
+                self.sync()
+        self.assertEqual(refs(self.source, str(self.destination)),
+                         {'refs/heads/upstream/baseline-7.0': self.first})
+        self.assertEqual(self.reporter.calls, [])
+
+    def test_large_initial_history_is_seeded_with_original_ancestor_commits(self):
+        for i in range(7):
+            tip = self.commit('history ' + str(i))
+        self.entry['baseline_revisions'] = [tip]
+        real_git = sync_module.git
+        accepted = []
+        history = git(self.source, 'rev-list', '--first-parent', '--reverse', tip).splitlines()
+        interrupted = True
+        def bounded_server(root, *args, **kwargs):
+            if args[0] == 'push':
+                existing = list(refs(self.source, str(self.destination)).values())
+                for arg in args:
+                    if ':refs/heads/' not in arg:
+                        continue
+                    sha = arg.split(':', 1)[0]
+                    if interrupted and sha == history[3]:
+                        return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 interrupted checkpoint')
+                    missing = int(git(root, 'rev-list', '--count', sha, '--not', *existing))
+                    if missing > 2:
+                        return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 transfer too large')
+                    accepted.append(sha)
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'BOOTSTRAP_COMMITS', 2), \
+             patch.object(sync_module, 'git', side_effect=bounded_server), \
+             patch.object(sync_module.time, 'sleep'):
+            with self.assertRaisesRegex(RuntimeError, 'interrupted checkpoint'):
+                self.sync()
+            self.assertEqual(refs(self.source, str(self.destination)),
+                             {'refs/heads/upstream/baseline-7.0': history[1]})
+            interrupted = False
+            result = self.sync()
+        observed = refs(self.source, str(self.destination))
+        self.assertEqual(observed['refs/heads/upstream/baseline-7.0'], tip)
+        self.assertEqual(observed['refs/heads/main'], tip)
+        self.assertEqual(len(observed), 3)
+        self.assertGreater(len(set(accepted)), 3)
+        self.assertFalse(any(row['status'] == 'conflict' for row in result))
+
 
 class IssueTests(unittest.TestCase):
     def test_conflicts_are_deduplicated_in_control_repository(self):
