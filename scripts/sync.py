@@ -9,6 +9,7 @@ import re
 import shlex
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.request
 
@@ -157,6 +158,23 @@ def cached_lfs_objects(root):
                   and path.parent.parent.name == path.name[:2])
 
 
+def has_oversized_blobs(root):
+    """Read object sizes before considering an expensive historical rewrite."""
+    oversized = False
+    with tempfile.TemporaryFile(mode='w+t') as errors:
+        with subprocess.Popen(['git', '-C', str(root), 'cat-file', '--batch-all-objects',
+                '--unordered', '--batch-check=%(objecttype) %(objectsize)'],
+                stdout=subprocess.PIPE, stderr=errors, text=True) as process:
+            for line in process.stdout:
+                kind, size = line.split()
+                if kind == 'blob' and int(size) > 99_000_000:
+                    oversized = True
+            if process.wait():
+                errors.seek(0)
+                raise RuntimeError(errors.read()[-4000:])
+    return oversized
+
+
 def prepare(entry, root, report_dir, destination=None):
     report_dir = report_dir.resolve()
     upstream = entry['upstream_url']
@@ -184,11 +202,17 @@ def prepare(entry, root, report_dir, destination=None):
         baseline_refs[ref] = revision
     report_dir.mkdir(parents=True, exist_ok=True)
     if entry.get('large_files') == 'git-lfs':
-        print(entry['name'] + ': converting oversized historical blobs to LFS', flush=True)
+        print(entry['name'] + ': inspecting historical Git object sizes', flush=True)
         mapping = report_dir / 'commit-map.csv'
         mapping.unlink(missing_ok=True)
-        git(root, 'lfs', 'migrate', 'import', '--everything', '--skip-fetch',
-            '--above=99MB', '--yes', '--object-map=' + str(mapping))
+        if has_oversized_blobs(root):
+            print(entry['name'] + ': converting oversized historical blobs to LFS', flush=True)
+            git(root, 'lfs', 'migrate', 'import', '--everything', '--skip-fetch',
+                '--above=99MB', '--yes', '--object-map=' + str(mapping))
+        else:
+            mapping.write_text('')
+            print(entry['name'] + ': no oversized blobs; preserving original history', flush=True)
+        print(entry['name'] + ': fetching existing upstream LFS objects', flush=True)
         git(root, 'lfs', 'fetch', '--all', 'upstream')
     hosted = {ref: git(root, 'rev-parse', ref).stdout.strip() for ref in original | baseline_refs}
     report = dict(repository='openharmony-qemu/' + entry['name'], upstream_url=upstream,

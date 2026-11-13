@@ -157,6 +157,25 @@ class MirrorTests(unittest.TestCase):
             finish(self.entry, work, reports, self.reporter)
         self.assertEqual(refs(self.source, str(self.destination)), {})
 
+    def test_small_history_skips_rewrite_but_copies_existing_lfs_objects(self):
+        git(self.source, 'lfs', 'install', '--local')
+        git(self.source, 'lfs', 'track', 'asset.bin')
+        content = b'original LFS content still requires transfer'
+        (self.source / 'asset.bin').write_bytes(content)
+        git(self.source, 'add', '.gitattributes', 'asset.bin')
+        git(self.source, 'commit', '-m', 'existing LFS input')
+        self.entry['large_files'] = 'git-lfs'
+        real_git = sync_module.git
+        def forbid_rewrite(root, *args, **kwargs):
+            self.assertNotEqual(args[:2], ('lfs', 'migrate'))
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'git', side_effect=forbid_rewrite):
+            self.sync()
+        self.assertEqual(refs(self.source, str(self.source))['refs/heads/main'],
+                         refs(self.source, str(self.destination))['refs/heads/main'])
+        objects = list((self.destination / 'lfs/objects').glob('*/*/*'))
+        self.assertEqual([path.read_bytes() for path in objects], [content])
+
     def test_push_readback_accepts_a_lost_success_response(self):
         real_git = sync_module.git
         failed = False
