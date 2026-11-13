@@ -115,6 +115,7 @@ def publish(root, destination, incoming, reporter, repository):
 
 
 def prepare(entry, root, report_dir, destination=None):
+    report_dir = report_dir.resolve()
     upstream = entry['upstream_url']
     destination = destination or 'https://github.com/openharmony-qemu/' + entry['name'] + '.git'
     git(root, 'init', '--bare')

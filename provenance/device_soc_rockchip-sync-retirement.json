@@ -1,0 +1,23 @@
+{
+  "repository": "openharmony-qemu/device_soc_rockchip",
+  "previous_commit": "ab0bde7e8c3963f6abd9a588e73cc581f7e78275",
+  "cleanup_commit": "dd5ebde1df6a8586ea45476a5e6b46de5ae77995",
+  "removed": [
+    ".github/scripts/sync_upstream.py",
+    ".github/workflows/sync-upstream.yml",
+    "UPSTREAM.json",
+    "README.qemu.md"
+  ],
+  "previous_upstream_config": {
+    "url": "https://gitcode.com/openharmony/device_soc_rockchip.git",
+    "branches": [
+      "OpenHarmony-7.0-Release"
+    ],
+    "baseline_revision": "0aa6ba16f89844023137fb84ac03189b30c8780b",
+    "qemu_branch": "OpenHarmony-7.0-Release-qemu",
+    "large_files": "git-lfs",
+    "bootstrap_status": "official_source_imported_NOT_build_or_runtime_validated",
+    "hosted_baseline_revision": "b65ad1ce197b2f534ff66b0f7c3f2eb78d78f16f"
+  },
+  "source_tree_unchanged": true
+}

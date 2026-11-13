@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -53,7 +54,8 @@ class MirrorTests(unittest.TestCase):
         self.counter += 1
         work = self.root / str(self.counter)
         work.mkdir()
-        return synchronize(self.entry, work, self.root / 'reports', self.reporter, str(self.destination))
+        report_dir = Path(os.path.relpath(self.root / 'reports'))
+        return synchronize(self.entry, work, report_dir, self.reporter, str(self.destination))
 
     def test_all_branches_fast_forward_noop_and_destination_preservation(self):
         result = self.sync()
