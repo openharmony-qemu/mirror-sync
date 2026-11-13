@@ -216,8 +216,9 @@ class MirrorTests(unittest.TestCase):
             return real_git(root, *args, **kwargs)
         with patch.object(sync_module, 'git', side_effect=record_push):
             result = self.sync()
-        self.assertEqual(len(pushes), 1)
-        self.assertIn('--atomic', pushes[0])
+        self.assertEqual(len(pushes), 2)
+        self.assertIn(self.first + ':refs/heads/upstream/baseline-7.0', pushes[0])
+        self.assertIn('--atomic', pushes[1])
         self.assertTrue(all(row['status'] == 'created' and row['old'] is None for row in result))
 
     def test_atomic_batch_race_preserves_writer_and_publishes_other_refs(self):
@@ -248,7 +249,10 @@ class MirrorTests(unittest.TestCase):
         second = self.commit('later upstream')
         git(self.source, 'branch', '-f', 'feature/nested', second)
         real_git = sync_module.git
+        attempted = []
         def reject_later_commit(root, *args, **kwargs):
+            if args[0] == 'push':
+                attempted.append(args)
             if args[0] == 'push' and any(arg.startswith(second + ':') for arg in args):
                 return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 transfer failed')
             return real_git(root, *args, **kwargs)
@@ -258,6 +262,7 @@ class MirrorTests(unittest.TestCase):
                 self.sync()
         self.assertEqual(refs(self.source, str(self.destination)),
                          {'refs/heads/upstream/baseline-7.0': self.first})
+        self.assertIn(self.first + ':refs/heads/upstream/baseline-7.0', attempted[0])
         self.assertEqual(self.reporter.calls, [])
 
     def test_large_initial_history_is_seeded_with_original_ancestor_commits(self):

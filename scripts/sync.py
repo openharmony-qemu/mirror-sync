@@ -81,6 +81,16 @@ class Issues:
 
 def publish(root, destination, incoming, reporter, repository, lfs_complete=False, bootstrap=True):
     """Test ancestry before each normal push; a racing writer cannot be overwritten."""
+    baselines = {ref: sha for ref, sha in incoming.items()
+                 if ref.startswith('refs/heads/upstream/baseline-')}
+    if baselines and len(baselines) < len(incoming):
+        # Complete fixed refs before even attempting ordinary atomic batches.
+        # A large unrelated branch must not delay baseline availability.
+        results = publish(root, destination, baselines, reporter, repository,
+                          lfs_complete=lfs_complete, bootstrap=bootstrap)
+        ordinary = {ref: sha for ref, sha in incoming.items() if ref not in baselines}
+        return results + publish(root, destination, ordinary, reporter, repository,
+                                 lfs_complete=lfs_complete, bootstrap=False)
     current = refs(root, destination)
     environment = dict(os.environ)
     if lfs_complete:
