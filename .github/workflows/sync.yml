@@ -16,10 +16,6 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: mirror-sync
-  cancel-in-progress: false
-
 jobs:
   plan:
     runs-on: ubuntu-24.04
@@ -39,6 +35,9 @@ jobs:
     needs: plan
     runs-on: ubuntu-24.04
     timeout-minutes: 350
+    concurrency:
+      group: mirror-sync-${{ matrix.repository }}
+      cancel-in-progress: false
     permissions:
       contents: read
       issues: write
