@@ -522,7 +522,7 @@
         "49623d0c4e1af3c680845191948d10f6d3e92f8a"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_emoji_segmenter",
@@ -531,7 +531,7 @@
         "955936be8b391e00835257059607d7c5b72ce744"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_expat",
@@ -540,7 +540,7 @@
         "69d6c054c1bd5258c2a13405a7f5628c72c177c2"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_farmhash",
@@ -549,7 +549,7 @@
         "816a4ae622e964763ca0862d9dbd19324a1eaf45"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_fast_float",
@@ -558,7 +558,7 @@
         "cb1d42aaa1e14b09e1452cfdef373d051b8c02a4"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_federated-compute",
@@ -567,7 +567,7 @@
         "e51058dfe7888094ecc09cda38bfceffd4d4664b"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_ffmpeg",
@@ -576,7 +576,7 @@
         "089b28673a1a01aafe0d2b8d47da04d2589bf7d0"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_flac",
@@ -585,7 +585,7 @@
         "807e251d9f8c5dd6059e547931e9c6a4251967af"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_flatbuffers",
@@ -594,7 +594,7 @@
         "187240970746d00bbd26b0f5873ed54d2477f9f3"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_fontconfig",
@@ -603,7 +603,7 @@
         "23b3fc6e58a13d126b9c30fafc9a16f8bd7143e9"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_fp16",
@@ -612,7 +612,7 @@
         "0a603df2a49756f65284625ca58a4db2e789b8bb"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_freetype",
@@ -621,7 +621,7 @@
         "4a3f908f4ef3870837023e1bcaaef90e369192c7"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_fuzztest",
@@ -630,7 +630,7 @@
         "7406afb783ff5e7f3a1a66aebb81090622716412"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_fxdiv",
@@ -639,7 +639,7 @@
         "63058eff77e11aa15bf531df5dd34395ec3017c8"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_gemmlowp",
@@ -648,7 +648,7 @@
         "16e8662c34917be0065110bfcd9cc27d30f52fdf"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_vulkan_deps_glslang",
@@ -657,7 +657,7 @@
         "7a47e2531cb334982b2a2dd8513dca0a3de4373d"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_benchmark",
@@ -666,7 +666,7 @@
         "188e8278990a9069ffc84441cb5a024fd0bede37"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_googletest",
@@ -675,7 +675,7 @@
         "4fe3307fb2d9f86d19777c7eb0e4809e9694dde7"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_harfbuzz_ng",
@@ -684,7 +684,7 @@
         "20b8ca9acc661990280bc2c87c27831c7482aa32"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_highway",
@@ -693,7 +693,7 @@
         "84379d1c73de9681b54fbe1c035a23c7bd5d272d"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_hunspell_dictionaries",
@@ -702,7 +702,7 @@
         "cccf64a8acc951afe3f47fee023908e55699bc58"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_third_party_icu",
@@ -711,7 +711,7 @@
         "4652914326450b9674a8f61883c961fecdd611f3"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_ink",
@@ -720,7 +720,7 @@
         "11ca89062782d7e5a57741a303a925f510b91015"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_ink-stroke-modeler",
@@ -729,7 +729,7 @@
         "2cd45e8683025c28fa2efcf672ad46607e8af869"
       ],
       "large_files": "git-lfs",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "chromium_instrumented_libraries",
