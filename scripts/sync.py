@@ -81,14 +81,44 @@ class Issues:
 def publish(root, destination, incoming, reporter, repository, lfs_complete=False):
     """Test ancestry before each normal push; a racing writer cannot be overwritten."""
     current = refs(root, destination)
+    environment = dict(os.environ)
+    if lfs_complete:
+        environment['GIT_LFS_SKIP_PUSH'] = '1'
+    # Many upstream release/weekly branches point to the same commit. Publishing
+    # those new names together uploads exactly the same history as one ref and
+    # avoids a separate authenticated round trip for every branch name.
+    groups = {}
+    for ref, new in sorted(incoming.items()):
+        if (ref not in current and not protected(ref) and not any(
+                existing.startswith(ref + '/') or ref.startswith(existing + '/')
+                for existing in current)):
+            groups.setdefault(new, []).append(ref)
+    created = set()
+    for new, names in groups.items():
+        for start in range(0, len(names), 128):
+            group = names[start:start + 128]
+            if len(group) < 2:
+                continue
+            pushed = git(root, 'push', '--atomic', '--porcelain', destination,
+                         *(new + ':' + ref for ref in group),
+                         check=False, environment=environment)
+            after = None if pushed.returncode == 0 else refs(root, destination)
+            for ref in group:
+                if pushed.returncode == 0 or after.get(ref) == new:
+                    created.add(ref)
+                    current[ref] = new
+            # A rejected atomic batch falls through to the existing per-ref
+            # checks: preserve conflicting refs and still publish other branches.
     results = []
     for ref, new in sorted(incoming.items()):
-        old = current.get(ref)
+        old = None if ref in created else current.get(ref)
         item = dict(ref=ref, old=old, new=new)
         reason = None
         blockers = [existing for existing in current
                     if existing.startswith(ref + '/') or ref.startswith(existing + '/')]
-        if protected(ref):
+        if ref in created:
+            item['status'] = 'created'
+        elif protected(ref):
             reason = 'Upstream uses a reserved QEMU development branch name.'
         elif blockers:
             reason = 'Branch namespace conflicts with destination refs: ' + ', '.join(sorted(blockers))
@@ -104,11 +134,6 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
             if ancestor.returncode == 1:
                 reason = 'Non-fast-forward branch update (upstream rewrite or local divergence).'
         if not reason and 'status' not in item:
-            environment = dict(os.environ)
-            if lfs_complete:
-                # Every object was uploaded before any ref. Re-running the LFS
-                # pre-push history scan for each branch adds no data protection.
-                environment['GIT_LFS_SKIP_PUSH'] = '1'
             for attempt in range(3):
                 pushed = git(root, 'push', '--porcelain', destination, new + ':' + ref,
                              check=False, environment=environment)

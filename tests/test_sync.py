@@ -207,6 +207,43 @@ class MirrorTests(unittest.TestCase):
         self.assertTrue(all(row['status'] == 'created' for row in result))
         self.assertEqual(self.reporter.calls, [])
 
+    def test_identical_new_branch_heads_share_one_atomic_push(self):
+        real_git = sync_module.git
+        pushes = []
+        def record_push(root, *args, **kwargs):
+            if args[0] == 'push':
+                pushes.append(args)
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'git', side_effect=record_push):
+            result = self.sync()
+        self.assertEqual(len(pushes), 1)
+        self.assertIn('--atomic', pushes[0])
+        self.assertTrue(all(row['status'] == 'created' and row['old'] is None for row in result))
+
+    def test_atomic_batch_race_preserves_writer_and_publishes_other_refs(self):
+        real_git = sync_module.git
+        racing = None
+        def concurrent_writer(root, *args, **kwargs):
+            nonlocal racing
+            if args[0] == 'push' and '--atomic' in args and racing is None:
+                racing = self.commit('concurrent destination writer')
+                git(self.source, 'push', str(self.destination), 'HEAD:refs/heads/main')
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'git', side_effect=concurrent_writer):
+            result = self.sync()
+        observed = refs(self.source, str(self.destination))
+        self.assertEqual(observed['refs/heads/main'], racing)
+        self.assertEqual(observed['refs/heads/feature/nested'], self.first)
+        self.assertEqual(observed['refs/heads/upstream/baseline-7.0'], self.first)
+        self.assertEqual(len(self.reporter.calls), 1)
+        self.assertEqual(next(row['status'] for row in result if row['ref'] == 'refs/heads/main'), 'conflict')
+
+    def test_non_atomic_server_uses_safe_individual_pushes(self):
+        git(self.destination, 'config', 'receive.advertiseAtomic', 'false')
+        result = self.sync()
+        self.assertTrue(all(row['status'] == 'created' for row in result))
+        self.assertEqual(self.reporter.calls, [])
+
 
 class IssueTests(unittest.TestCase):
     def test_conflicts_are_deduplicated_in_control_repository(self):
