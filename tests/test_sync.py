@@ -341,6 +341,13 @@ class MirrorTests(unittest.TestCase):
         self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
 
     def test_single_commit_is_transferred_in_bounded_blob_packs_and_tags_are_removed(self):
+        self.check_bounded_packs(False)
+
+    def test_bounded_transfer_avoids_an_oversized_initial_push(self):
+        self.check_bounded_packs(True)
+
+    def check_bounded_packs(self, proactive):
+        self.entry["bounded_transfer"] = proactive
         self.sync()
         for index in range(9):
             (self.source / f'asset-{index}').write_bytes(os.urandom(1024))
@@ -370,7 +377,7 @@ class MirrorTests(unittest.TestCase):
         received = [json.loads(line) for line in record.read_text().splitlines()]
         staged = [row for row in received if any(sync_module.TRANSFER_PREFIX in ref
                   and ref.split()[1] != '0' * 40 for ref in row['refs'])]
-        self.assertTrue(any(row['size'] > 4096 for row in received))
+        self.assertEqual(any(row['size'] > 4096 for row in received), not proactive)
         self.assertGreaterEqual(len(staged), 5)
         self.assertTrue(all(row['size'] <= 4096 for row in staged))
         self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
@@ -378,6 +385,7 @@ class MirrorTests(unittest.TestCase):
         self.assertFalse(any(row['status'] == 'conflict' for row in result))
 
     def test_nonfastforward_writer_during_blob_staging_is_preserved_and_reported(self):
+        self.entry["bounded_transfer"] = True
         self.sync()
         incoming = self.commit('upstream revised source')
         real_git = sync_module.git

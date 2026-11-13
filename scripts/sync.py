@@ -214,7 +214,8 @@ def transfer_checkpoints(root, destination, ref, new, reporter, repository, lfs_
     return results
 
 
-def publish(root, destination, incoming, reporter, repository, lfs_complete=False, bootstrap=True):
+def publish(root, destination, incoming, reporter, repository, lfs_complete=False, bootstrap=True,
+            bounded_transfer=False):
     """Test ancestry before each normal push; a racing writer cannot be overwritten."""
     baselines = {ref: sha for ref, sha in incoming.items()
                  if ref.startswith('refs/heads/upstream/baseline-')}
@@ -222,10 +223,12 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
         # Complete fixed refs before even attempting ordinary atomic batches.
         # A large unrelated branch must not delay baseline availability.
         results = publish(root, destination, baselines, reporter, repository,
-                          lfs_complete=lfs_complete, bootstrap=bootstrap)
+                          lfs_complete=lfs_complete, bootstrap=bootstrap,
+                          bounded_transfer=bounded_transfer)
         ordinary = {ref: sha for ref, sha in incoming.items() if ref not in baselines}
         return results + publish(root, destination, ordinary, reporter, repository,
-                                 lfs_complete=lfs_complete, bootstrap=bootstrap)
+                                 lfs_complete=lfs_complete, bootstrap=bootstrap,
+                                 bounded_transfer=bounded_transfer)
     current = refs(root, destination)
     environment = dict(os.environ)
     if lfs_complete:
@@ -234,7 +237,7 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
     # Populate an empty destination through real ancestor commits. Every step is
     # a normal fast-forward; no synthetic history or temporary remote refs are
     # needed. A failed initial transfer can then resume from the accepted prefix.
-    if bootstrap and ordered:
+    if bootstrap and ordered and not bounded_transfer:
         first = next((ref for ref in ordered if not protected(ref)), None)
         old = current.get(first)
         if first and old != incoming[first] and (not current or old):
@@ -257,7 +260,7 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
     # those new names together uploads exactly the same history as one ref and
     # avoids a separate authenticated round trip for every branch name.
     groups = {}
-    for ref in ordered:
+    for ref in ([] if bounded_transfer else ordered):
         new = incoming[ref]
         if (ref not in current and not protected(ref) and not any(
                 existing.startswith(ref + '/') or ref.startswith(existing + '/')
@@ -304,6 +307,12 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
                 raise RuntimeError(ancestor.stderr)
             if ancestor.returncode == 1:
                 reason = 'Non-fast-forward branch update (upstream rewrite or local divergence).'
+        if bounded_transfer and not reason and 'status' not in item:
+            transfer_blobs(root, destination, ref, new, lfs_complete)
+            old, safe = transfer_parent(root, destination, ref, new)
+            item['old'] = old
+            if not safe:
+                reason = 'Non-fast-forward destination change during object transfer.'
         if not reason and 'status' not in item:
             for attempt in range(3):
                 pushed = git(root, 'push', '--porcelain', '--progress', destination, new + ':' + ref,
@@ -460,7 +469,8 @@ def finish(entry, root, report_dir, reporter):
         print(entry['name'] + ': LFS upload complete', flush=True)
     load_transfer_objects(root, 'destination')
     results = publish(root, 'destination', report['hosted_refs'], reporter, report['repository'],
-                      lfs_complete=entry.get('large_files') == 'git-lfs')
+                      lfs_complete=entry.get('large_files') == 'git-lfs',
+                      bounded_transfer=entry.get('bounded_transfer') is True)
     report['results'] = results
     report['remaining_transfer_refs'] = cleanup_transfer_objects(root, 'destination', results)
     (report_dir / 'result.json').write_text(json.dumps(report, indent=2) + '\n')

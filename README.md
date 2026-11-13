@@ -31,6 +31,7 @@
 | `upstream_url` | 官方上游 Git 地址 |
 | `enabled` | 是否参与自动同步 |
 | `large_files` | `git-lfs` 表示将超过 99 MB 的历史文件转换到 Git LFS |
+| `bounded_transfer` | `true` 时直接分块上传原始对象，适用于已知的大历史整包传输问题 |
 | `baseline_revisions` | 可选的固定上游提交，同时保留为基线引用 |
 
 目标仓库需要提前创建，并关闭其 GitHub Actions，避免镜像推送触发上游构建工作流。

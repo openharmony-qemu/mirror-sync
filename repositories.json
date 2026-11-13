@@ -90,7 +90,8 @@
         "9536bc43fa66beb1a89fad20030156c49ad4e982"
       ],
       "large_files": "git-lfs",
-      "enabled": true
+      "enabled": true,
+      "bounded_transfer": true
     },
     {
       "name": "chromium_src",
@@ -99,7 +100,8 @@
         "a8168622b056f25c2e68d5f12fe2759bad2d9a44"
       ],
       "large_files": "git-lfs",
-      "enabled": true
+      "enabled": true,
+      "bounded_transfer": true
     },
     {
       "name": "chromium_arkweb",
@@ -198,7 +200,8 @@
         "74b1c1d8ea3f30af1b9a76fadcdf9d469afc2a57"
       ],
       "large_files": "git-lfs",
-      "enabled": true
+      "enabled": true,
+      "bounded_transfer": true
     },
     {
       "name": "chromium_third_party_angle_glmark2",
