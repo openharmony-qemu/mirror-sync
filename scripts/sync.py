@@ -78,6 +78,9 @@ def transfer_blobs(root, destination, ref, new, lfs_complete):
                   input_text=objects).stdout.splitlines()
     blobs = sorted((parts[0], int(parts[2])) for line in details
                    if (parts := line.split())[1] == 'blob')
+    total_bytes = sum(size for _, size in blobs)
+    print(f'{ref}: staging plan: {len(blobs)} original blobs, {total_bytes} bytes, '
+          f'pack limit {TRANSFER_BYTES} bytes', flush=True)
     environment = dict(os.environ)
     if lfs_complete:
         environment['GIT_LFS_SKIP_PUSH'] = '1'
@@ -108,6 +111,8 @@ def transfer_blobs(root, destination, ref, new, lfs_complete):
         size += blob[1]
     if batch:
         upload(batch)
+    print(f'{ref}: original blob staging complete ({len(blobs)} blobs, {total_bytes} bytes)',
+          flush=True)
     return len(blobs)
 
 
