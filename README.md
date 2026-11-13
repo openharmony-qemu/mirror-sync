@@ -40,6 +40,9 @@ gh workflow run sync.yml --repo openharmony-qemu/mirror-sync -f repositories=glo
 
 # 只下载和检查上游，不发布目标分支
 gh workflow run sync.yml --repo openharmony-qemu/mirror-sync -f repositories=global_i18n -F prepare_only=true
+
+# 手动任务也可选用 GitHub 标准 ARM64 runner；定时任务仍使用默认 Ubuntu x64
+gh workflow run sync.yml --repo openharmony-qemu/mirror-sync -f repositories=global_i18n -f runner=ubuntu-24.04-arm
 ```
 
 每次运行生成 `mirror-evidence-*` artifact，记录分支 SHA、同步结果和 LFS 转换表，
