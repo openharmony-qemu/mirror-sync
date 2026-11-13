@@ -6,7 +6,9 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import subprocess
+import sys
 import urllib.request
 
 CONTROL = 'openharmony-qemu/mirror-sync'
@@ -203,11 +205,15 @@ def main():
         repo.mkdir(parents=True, exist_ok=False)
         prepare(entry, repo, report_dir)
         return
-    if not os.environ.get('MIRROR_TOKEN'):
+    if not (os.environ.get('MIRROR_TOKEN') or
+            (os.environ.get('MIRROR_APP_ID') and os.environ.get('MIRROR_APP_PRIVATE_KEY'))):
         raise ValueError('Configure MIRROR_APP_ID/MIRROR_APP_PRIVATE_KEY or MIRROR_TOKEN in mirror-sync.')
     git(repo, 'config', 'credential.helper', '')
+    git(repo, 'config', 'credential.useHttpPath', 'true')
+    git(repo, 'config', 'lfs.cachecredentials', 'false')
     git(repo, 'config', 'credential.https://github.com.helper',
-        '!f() { echo username=x-access-token; echo "password=$MIRROR_TOKEN"; }; f')
+        '!' + shlex.quote(sys.executable) + ' ' +
+        shlex.quote(str(Path(__file__).with_name('github_credentials.py').resolve())))
     results = finish(entry, repo, report_dir, Issues())
     print(json.dumps({status: sum(r['status'] == status for r in results)
                       for status in ('created', 'updated', 'unchanged', 'conflict')}))

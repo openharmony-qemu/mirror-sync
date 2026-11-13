@@ -64,24 +64,20 @@ jobs:
         env:
           MIRROR_REPOSITORY: ${{ matrix.repository }}
         run: python3 scripts/sync.py --repository "$MIRROR_REPOSITORY" --work "$RUNNER_TEMP/mirrors" --phase prepare
-      - name: Create a token scoped to this destination after source preparation
-        if: ${{ !inputs.prepare_only && vars.MIRROR_APP_ID != '' }}
-        id: app-token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
-        with:
-          app-id: ${{ vars.MIRROR_APP_ID }}
-          private-key: ${{ secrets.MIRROR_APP_PRIVATE_KEY }}
-          owner: openharmony-qemu
-          repositories: ${{ matrix.repository }}
-          permission-contents: write
-          permission-workflows: write
       - name: Publish branches and report conflicts
         if: ${{ !inputs.prepare_only }}
         env:
           GH_TOKEN: ${{ github.token }}
-          MIRROR_TOKEN: ${{ steps.app-token.outputs.token || secrets.MIRROR_TOKEN }}
+          MIRROR_APP_ID: ${{ vars.MIRROR_APP_ID }}
+          MIRROR_APP_PRIVATE_KEY: ${{ secrets.MIRROR_APP_PRIVATE_KEY }}
+          MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
           MIRROR_REPOSITORY: ${{ matrix.repository }}
         run: python3 scripts/sync.py --repository "$MIRROR_REPOSITORY" --work "$RUNNER_TEMP/mirrors" --phase publish
+      - name: Revoke the current installation token
+        if: ${{ always() && !inputs.prepare_only }}
+        env:
+          MIRROR_REPOSITORY: ${{ matrix.repository }}
+        run: python3 scripts/github_credentials.py revoke
       - name: Record source-only diagnostic scope
         if: inputs.prepare_only
         run: echo 'Source preparation only. No destination branches were published or verified.' >> "$GITHUB_STEP_SUMMARY"
