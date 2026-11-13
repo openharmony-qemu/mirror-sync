@@ -37,6 +37,7 @@ TPC 使用 GitCode 官方源，避免依赖已检查过、缺失所需版本的 
 授权清单中的目标镜像仓库。在本仓库设置 Actions 变量 `MIRROR_APP_ID` 和 secret
 `MIRROR_APP_PRIVATE_KEY`。工作流完成上游下载和历史转换后，再为当前目标仓库
 申请短期 token，以免下载大型仓库时消耗 token 的有效期。
+预填注册链接和本地配置命令见 [APP_SETUP.md](APP_SETUP.md)。
 
 也可配置 secret `MIRROR_TOKEN`，使用只授权目标镜像仓库、具有上述权限的
 fine-grained PAT。若上游含 `.github/workflows`，同步这些源文件需要 Workflows 权限；
