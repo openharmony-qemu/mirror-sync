@@ -8,6 +8,10 @@ on:
         description: 'Optional comma-separated enabled repository names; empty means all'
         type: string
         required: false
+      prepare_only:
+        description: 'Fetch and verify all upstream branches without publishing (migration diagnostics)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -47,6 +51,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Verify synchronization authorization is configured
+        if: ${{ !inputs.prepare_only }}
         env:
           APP_ID: ${{ vars.MIRROR_APP_ID }}
           APP_KEY: ${{ secrets.MIRROR_APP_PRIVATE_KEY }}
@@ -61,7 +66,7 @@ jobs:
           MIRROR_REPOSITORY: ${{ matrix.repository }}
         run: python3 scripts/sync.py --repository "$MIRROR_REPOSITORY" --work "$RUNNER_TEMP/mirrors" --phase prepare
       - name: Create a token scoped to this destination after source preparation
-        if: vars.MIRROR_APP_ID != ''
+        if: ${{ !inputs.prepare_only && vars.MIRROR_APP_ID != '' }}
         id: app-token
         uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
         with:
@@ -72,11 +77,15 @@ jobs:
           permission-contents: write
           permission-workflows: write
       - name: Publish branches and report conflicts
+        if: ${{ !inputs.prepare_only }}
         env:
           GH_TOKEN: ${{ github.token }}
           MIRROR_TOKEN: ${{ steps.app-token.outputs.token || secrets.MIRROR_TOKEN }}
           MIRROR_REPOSITORY: ${{ matrix.repository }}
         run: python3 scripts/sync.py --repository "$MIRROR_REPOSITORY" --work "$RUNNER_TEMP/mirrors" --phase publish
+      - name: Record source-only diagnostic scope
+        if: inputs.prepare_only
+        run: echo 'Source preparation only. No destination branches were published or verified.' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
