@@ -15,6 +15,9 @@ import urllib.request
 
 CONTROL = 'openharmony-qemu/mirror-sync'
 BOOTSTRAP_COMMITS = 10000
+RECOVERY_COMMITS = 500
+TRANSFER_BYTES = 128 * 1024 * 1024
+TRANSFER_PREFIX = 'refs/tags/mirror-sync-transfer/'
 
 
 def git(root, *args, check=True, input_text=None, environment=None):
@@ -33,6 +36,111 @@ def refs(root, remote):
 
 def protected(ref):
     return bool(re.fullmatch(r'refs/heads/OpenHarmony-.+-Release-qemu', ref))
+
+
+def transient_transport(diagnostic):
+    return bool(re.search(r'HTTP (500|502|503|504)\b', diagnostic) or
+        any(term in diagnostic.lower() for term in
+            ('unexpected disconnect', 'remote end hung up', 'connection reset', 'timed out')))
+
+
+def transfer_refs(root, destination):
+    result = {}
+    for line in git(root, 'ls-remote', '--tags', destination, TRANSFER_PREFIX + '*').stdout.splitlines():
+        sha, ref = line.split()
+        suffix = ref[len(TRANSFER_PREFIX):]
+        if not re.fullmatch('[0-9a-f]{64}/[0-9a-f]{40}/[0-9a-f]{40}', suffix) or suffix.split('/')[-1] != sha:
+            raise RuntimeError('Unexpected ref in the reserved transfer namespace: ' + ref)
+        result[ref] = sha
+    return result
+
+
+def load_transfer_objects(root, destination):
+    existing = transfer_refs(root, destination)
+    names = list(existing)
+    for start in range(0, len(names), 64):
+        git(root, 'fetch', '--no-tags', '--filter=blob:none', destination, *names[start:start + 64])
+    for sha in set(existing.values()):
+        if git(root, 'cat-file', '-t', sha).stdout.strip() != 'tree':
+            raise RuntimeError('Transfer ref does not point to a content-addressed tree')
+    return existing
+
+
+def transfer_blobs(root, destination, ref, new, lfs_complete):
+    """Seed bounded packs of original blobs; source commits and trees stay intact."""
+    staging = load_transfer_objects(root, destination)
+    tips = sorted(set(refs(root, destination).values()) | set(staging.values()))
+    kinds = git(root, 'cat-file', '--batch-check=%(objectname) %(objecttype)',
+                input_text='\n'.join(tips) + '\n').stdout.splitlines() if tips else []
+    available = [line.split()[0] for line in kinds if line.split()[-1] in ('commit', 'tree')]
+    objects = git(root, 'rev-list', '--objects', '--no-object-names', new, '--not', *available).stdout
+    details = git(root, 'cat-file', '--batch-check=%(objectname) %(objecttype) %(objectsize)',
+                  input_text=objects).stdout.splitlines()
+    blobs = sorted((parts[0], int(parts[2])) for line in details
+                   if (parts := line.split())[1] == 'blob')
+    environment = dict(os.environ)
+    if lfs_complete:
+        environment['GIT_LFS_SKIP_PUSH'] = '1'
+    prefix = TRANSFER_PREFIX + hashlib.sha256(ref.encode()).hexdigest() + '/' + new + '/'
+
+    def upload(batch):
+        tree = git(root, 'mktree', input_text=''.join(
+            f'100644 blob {oid}\t{oid}\n' for oid, _ in batch)).stdout.strip()
+        tag = prefix + tree
+        print(f'{ref}: staging {len(batch)} original blobs ({sum(size for _, size in batch)} bytes)', flush=True)
+        for attempt in range(3):
+            pushed = git(root, 'push', '--porcelain', '--progress', destination,
+                         tree + ':' + tag, check=False, environment=environment)
+            if pushed.returncode == 0 or transfer_refs(root, destination).get(tag) == tree:
+                return
+            if not transient_transport(pushed.stderr + pushed.stdout) or attempt == 2:
+                raise RuntimeError(pushed.stderr[-4000:] + pushed.stdout[-1000:])
+            time.sleep(3 * (attempt + 1))
+
+    batch, size = [], 0
+    for blob in blobs:
+        if blob[1] > TRANSFER_BYTES:
+            raise RuntimeError('An individual source blob exceeds the bounded transfer size')
+        if batch and size + blob[1] > TRANSFER_BYTES:
+            upload(batch)
+            batch, size = [], 0
+        batch.append(blob)
+        size += blob[1]
+    if batch:
+        upload(batch)
+    return len(blobs)
+
+
+def cleanup_transfer_objects(root, destination, results):
+    accepted = {hashlib.sha256(row['ref'].encode()).hexdigest(): row['new'] for row in results
+                if row['status'] in ('created', 'updated', 'unchanged')}
+    removable = {}
+    for ref, tree in transfer_refs(root, destination).items():
+        key, target, _ = ref[len(TRANSFER_PREFIX):].split('/')
+        if key not in accepted:
+            continue
+        if target == accepted[key] or git(root, 'merge-base', '--is-ancestor', target,
+                                         accepted[key], check=False).returncode == 0:
+            removable[ref] = tree
+    names = list(removable)
+    for start in range(0, len(names), 32):
+        batch = names[start:start + 32]
+        git(root, 'push', '--atomic', '--porcelain',
+            *('--force-with-lease=' + ref + ':' + removable[ref] for ref in batch),
+            destination, *(':' + ref for ref in batch))
+    return transfer_refs(root, destination)
+
+
+def transfer_parent(root, destination, ref, new):
+    observed = refs(root, destination).get(ref)
+    if not observed:
+        return observed, True
+    if git(root, 'cat-file', '-e', observed + '^{commit}', check=False).returncode:
+        git(root, 'fetch', '--no-tags', destination, ref)
+    ancestor = git(root, 'merge-base', '--is-ancestor', observed, new, check=False)
+    if ancestor.returncode not in (0, 1):
+        raise RuntimeError(ancestor.stderr)
+    return observed, ancestor.returncode == 0
 
 
 class Issues:
@@ -79,6 +187,33 @@ class Issues:
         return issue['number']
 
 
+def transfer_checkpoints(root, destination, ref, new, reporter, repository, lfs_complete):
+    """Recover a failed large transfer with original first-parent ancestors."""
+    current = refs(root, destination)
+    history = git(root, 'rev-list', '--first-parent', '--reverse', new).stdout.splitlines()
+    positions = {sha: index for index, sha in enumerate(history)}
+    old = current.get(ref)
+    if old and old not in positions:
+        return []
+    available = max((positions.get(sha, -1) for sha in current.values()), default=-1)
+    checkpoints = [sha for sha in history[RECOVERY_COMMITS - 1::RECOVERY_COMMITS]
+                   if positions[sha] > available and sha != new]
+    print(f'{repository} {ref}: {len(history)} first-parent commits; '
+          f'{len(checkpoints)} recovery checkpoints', flush=True)
+    results = []
+    for checkpoint in checkpoints:
+        observed = refs(root, destination).get(ref)
+        if observed in positions and positions[observed] >= positions[checkpoint]:
+            continue
+        print(f'{repository}: recovering transfer through {checkpoint}', flush=True)
+        result = publish(root, destination, {ref: checkpoint}, reporter, repository,
+                         lfs_complete=lfs_complete, bootstrap=False)
+        results.extend(result)
+        if any(row['status'] == 'conflict' for row in result):
+            break
+    return results
+
+
 def publish(root, destination, incoming, reporter, repository, lfs_complete=False, bootstrap=True):
     """Test ancestry before each normal push; a racing writer cannot be overwritten."""
     baselines = {ref: sha for ref, sha in incoming.items()
@@ -90,7 +225,7 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
                           lfs_complete=lfs_complete, bootstrap=bootstrap)
         ordinary = {ref: sha for ref, sha in incoming.items() if ref not in baselines}
         return results + publish(root, destination, ordinary, reporter, repository,
-                                 lfs_complete=lfs_complete, bootstrap=False)
+                                 lfs_complete=lfs_complete, bootstrap=bootstrap)
     current = refs(root, destination)
     environment = dict(os.environ)
     if lfs_complete:
@@ -134,7 +269,7 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
             group = names[start:start + 128]
             if len(group) < 2:
                 continue
-            pushed = git(root, 'push', '--atomic', '--porcelain', destination,
+            pushed = git(root, 'push', '--atomic', '--porcelain', '--progress', destination,
                          *(new + ':' + ref for ref in group),
                          check=False, environment=environment)
             after = None if pushed.returncode == 0 else refs(root, destination)
@@ -171,7 +306,7 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
                 reason = 'Non-fast-forward branch update (upstream rewrite or local divergence).'
         if not reason and 'status' not in item:
             for attempt in range(3):
-                pushed = git(root, 'push', '--porcelain', destination, new + ':' + ref,
+                pushed = git(root, 'push', '--porcelain', '--progress', destination, new + ':' + ref,
                              check=False, environment=environment)
                 if pushed.returncode == 0:
                     break
@@ -189,11 +324,38 @@ def publish(root, destination, incoming, reporter, repository, lfs_complete=Fals
                     item['old'] = observed
                     break
                 diagnostic = pushed.stderr + pushed.stdout
-                transient = (re.search(r'HTTP (500|502|503|504)\b', diagnostic) or
-                    any(term in diagnostic.lower() for term in
-                        ('unexpected disconnect', 'remote end hung up', 'connection reset', 'timed out')))
+                transient = transient_transport(diagnostic)
                 if not transient or attempt == 2:
                     raise RuntimeError(pushed.stderr[-4000:] + pushed.stdout[-1000:])
+                if bootstrap and attempt == 0:
+                    try:
+                        recovered = transfer_checkpoints(root, destination, ref, new, reporter,
+                                                         repository, lfs_complete)
+                    except RuntimeError as error:
+                        if not transient_transport(str(error)):
+                            raise
+                        recovered = []
+                    if recovered:
+                        old, safe = transfer_parent(root, destination, ref, new)
+                        item['old'] = old
+                        if not safe or any(row['status'] == 'conflict' for row in recovered):
+                            reason = 'Destination changed during segmented transfer; review the preserved history.'
+                            break
+                        current[ref] = old
+                        continue
+                    transfer_blobs(root, destination, ref, new, lfs_complete)
+                    old, safe = transfer_parent(root, destination, ref, new)
+                    item['old'] = old
+                    if not safe:
+                        reason = 'Non-fast-forward destination change during object transfer.'
+                        break
+                elif bootstrap and attempt == 1:
+                    transfer_blobs(root, destination, ref, new, lfs_complete)
+                    old, safe = transfer_parent(root, destination, ref, new)
+                    item['old'] = old
+                    if not safe:
+                        reason = 'Non-fast-forward destination change during object transfer.'
+                        break
                 print(f'{repository} {ref}: transient transport failure; retrying', flush=True)
                 time.sleep(3 * (attempt + 1))
             if not reason:
@@ -296,9 +458,11 @@ def finish(entry, root, report_dir, reporter):
             git(root, 'lfs', 'push', '--object-id', 'destination', '--stdin',
                 input_text='\n'.join(objects) + '\n')
         print(entry['name'] + ': LFS upload complete', flush=True)
+    load_transfer_objects(root, 'destination')
     results = publish(root, 'destination', report['hosted_refs'], reporter, report['repository'],
                       lfs_complete=entry.get('large_files') == 'git-lfs')
     report['results'] = results
+    report['remaining_transfer_refs'] = cleanup_transfer_objects(root, 'destination', results)
     (report_dir / 'result.json').write_text(json.dumps(report, indent=2) + '\n')
     return results
 

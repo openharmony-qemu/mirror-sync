@@ -303,6 +303,111 @@ class MirrorTests(unittest.TestCase):
         self.assertGreater(len(set(accepted)), 3)
         self.assertFalse(any(row['status'] == 'conflict' for row in result))
 
+    def test_large_new_branch_recovers_in_a_populated_destination_and_resumes(self):
+        self.sync()
+        git(self.source, 'checkout', '-b', 'next-release')
+        for i in range(7):
+            tip = self.commit('next release ' + str(i))
+        history = git(self.source, 'rev-list', '--first-parent', '--reverse', tip).splitlines()
+        real_git = sync_module.git
+        interrupted = True
+        def bounded_server(root, *args, **kwargs):
+            if args[0] == 'push':
+                existing = list(refs(self.source, str(self.destination)).values())
+                for arg in args:
+                    if ':refs/heads/' not in arg:
+                        continue
+                    sha = arg.split(':', 1)[0]
+                    if interrupted and sha == history[3]:
+                        return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 checkpoint interrupted')
+                    missing = int(git(root, 'rev-list', '--count', sha, '--not', *existing))
+                    if missing > 2:
+                        return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 transfer too large')
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'RECOVERY_COMMITS', 2), \
+             patch.object(sync_module, 'git', side_effect=bounded_server), \
+             patch.object(sync_module.time, 'sleep'):
+            with self.assertRaisesRegex(RuntimeError, 'HTTP 500'):
+                self.sync()
+            self.assertEqual(refs(self.source, str(self.destination))['refs/heads/next-release'], history[1])
+            interrupted = False
+            result = self.sync()
+        observed = refs(self.source, str(self.destination))
+        self.assertEqual(observed['refs/heads/next-release'], tip)
+        self.assertEqual(observed['refs/heads/main'], self.first)
+        self.assertEqual(len(observed), 4)
+        self.assertEqual(self.reporter.calls, [])
+        self.assertFalse(any(row['status'] == 'conflict' for row in result))
+        self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
+
+    def test_single_commit_is_transferred_in_bounded_blob_packs_and_tags_are_removed(self):
+        self.sync()
+        for index in range(9):
+            (self.source / f'asset-{index}').write_bytes(os.urandom(1024))
+        git(self.source, 'add', '.')
+        git(self.source, 'commit', '-m', 'one large source snapshot')
+        tip = git(self.source, 'rev-parse', 'HEAD')
+        # Enforce a real incoming-pack bound in receive-pack, rather than
+        # assuming that Git excludes blobs advertised through tree tags.
+        record = self.root / 'received-packs.jsonl'
+        git(self.destination, 'config', 'receive.unpackLimit', '1')
+        hook = self.destination / 'hooks/pre-receive'
+        hook.write_text('#!' + sys.executable + '\n' +
+            'import json, os, pathlib, sys\n' +
+            'refs = sys.stdin.read().splitlines()\n' +
+            'directory = os.environ.get("GIT_OBJECT_DIRECTORY")\n' +
+            'size = sum(p.stat().st_size for p in pathlib.Path(directory).rglob("*.pack")) if directory else 0\n' +
+            'with open(' + repr(str(record)) + ', "a") as stream:\n' +
+            '    stream.write(json.dumps(dict(size=size, refs=refs)) + "\\n")\n' +
+            'if size > 4096:\n' +
+            '    print("HTTP 500 incoming pack exceeds server limit", file=sys.stderr)\n' +
+            '    sys.exit(1)\n')
+        hook.chmod(0o755)
+        with patch.object(sync_module, 'TRANSFER_BYTES', 2048), \
+             patch.object(sync_module.time, 'sleep'):
+            result = self.sync()
+        self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], tip)
+        received = [json.loads(line) for line in record.read_text().splitlines()]
+        staged = [row for row in received if any(sync_module.TRANSFER_PREFIX in ref
+                  and ref.split()[1] != '0' * 40 for ref in row['refs'])]
+        self.assertTrue(any(row['size'] > 4096 for row in received))
+        self.assertGreaterEqual(len(staged), 5)
+        self.assertTrue(all(row['size'] <= 4096 for row in staged))
+        self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
+        self.assertEqual(self.reporter.calls, [])
+        self.assertFalse(any(row['status'] == 'conflict' for row in result))
+
+    def test_nonfastforward_writer_during_blob_staging_is_preserved_and_reported(self):
+        self.sync()
+        incoming = self.commit('upstream revised source')
+        real_git = sync_module.git
+        racing = None
+        def change_destination(root, *args, **kwargs):
+            nonlocal racing
+            if args[0] == 'push':
+                if any(arg == incoming + ':refs/heads/main' for arg in args):
+                    return subprocess.CompletedProcess(args, 1, '', 'error: HTTP 500 transfer failed')
+                if racing is None and any(sync_module.TRANSFER_PREFIX in arg for arg in args):
+                    git(self.source, 'reset', '--hard', self.first)
+                    racing = self.commit('concurrent destination revision')
+                    git(self.source, 'push', str(self.destination), 'HEAD:refs/heads/main')
+            return real_git(root, *args, **kwargs)
+        with patch.object(sync_module, 'git', side_effect=change_destination), \
+             patch.object(sync_module.time, 'sleep'):
+            result = self.sync()
+        self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], racing)
+        self.assertEqual(self.reporter.calls[0][1:4], ('refs/heads/main', racing, incoming))
+        self.assertEqual(next(row['status'] for row in result if row['ref'] == 'refs/heads/main'), 'conflict')
+        self.assertTrue(sync_module.transfer_refs(self.source, str(self.destination)))
+
+    def test_unexpected_transfer_tag_is_preserved(self):
+        self.sync()
+        tag = sync_module.TRANSFER_PREFIX + 'a' * 64 + '/' + self.first + '/' + 'b' * 40
+        git(self.destination, 'update-ref', tag, self.first)
+        with self.assertRaisesRegex(RuntimeError, 'reserved transfer namespace'):
+            sync_module.cleanup_transfer_objects(self.source, str(self.destination), [])
+        self.assertEqual(git(self.destination, 'rev-parse', tag), self.first)
+
 
 class IssueTests(unittest.TestCase):
     def test_conflicts_are_deduplicated_in_control_repository(self):
