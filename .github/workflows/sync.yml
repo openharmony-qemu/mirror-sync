@@ -1,0 +1,86 @@
+name: Synchronize mirrors
+on:
+  schedule:
+    - cron: '23 19 * * *'
+  workflow_dispatch:
+    inputs:
+      repositories:
+        description: 'Optional comma-separated enabled repository names; empty means all'
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mirror-sync
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test synchronization safety
+        run: python3 -m unittest discover -s tests -v
+      - id: plan
+        env:
+          SELECT_REPOSITORIES: ${{ inputs.repositories }}
+        run: python3 scripts/plan.py
+  synchronize:
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    permissions:
+      contents: read
+      issues: write
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify synchronization authorization is configured
+        env:
+          APP_ID: ${{ vars.MIRROR_APP_ID }}
+          APP_KEY: ${{ secrets.MIRROR_APP_PRIVATE_KEY }}
+          MIRROR_TOKEN: ${{ secrets.MIRROR_TOKEN }}
+        run: |
+          if [[ -z "$MIRROR_TOKEN" && ( -z "$APP_ID" || -z "$APP_KEY" ) ]]; then
+            echo 'Configure MIRROR_APP_ID + MIRROR_APP_PRIVATE_KEY, or MIRROR_TOKEN, in mirror-sync.'
+            exit 1
+          fi
+      - name: Fetch all upstream branches and prepare large-file history
+        env:
+          MIRROR_REPOSITORY: ${{ matrix.repository }}
+        run: python3 scripts/sync.py --repository "$MIRROR_REPOSITORY" --work "$RUNNER_TEMP/mirrors" --phase prepare
+      - name: Create a token scoped to this destination after source preparation
+        if: vars.MIRROR_APP_ID != ''
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3
+        with:
+          app-id: ${{ vars.MIRROR_APP_ID }}
+          private-key: ${{ secrets.MIRROR_APP_PRIVATE_KEY }}
+          owner: openharmony-qemu
+          repositories: ${{ matrix.repository }}
+          permission-contents: write
+          permission-workflows: write
+      - name: Publish branches and report conflicts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MIRROR_TOKEN: ${{ steps.app-token.outputs.token || secrets.MIRROR_TOKEN }}
+          MIRROR_REPOSITORY: ${{ matrix.repository }}
+        run: python3 scripts/sync.py --repository "$MIRROR_REPOSITORY" --work "$RUNNER_TEMP/mirrors" --phase publish
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mirror-evidence-${{ matrix.repository }}
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 90

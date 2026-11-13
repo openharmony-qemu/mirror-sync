@@ -1,0 +1,1474 @@
+{
+  "schema_version": 1,
+  "organization": "openharmony-qemu",
+  "qemu_branch": "OpenHarmony-7.0-Release-qemu",
+  "repositories": [
+    {
+      "name": "global_i18n",
+      "upstream_url": "https://gitcode.com/openharmony/global_i18n.git",
+      "baseline_revisions": [
+        "76e82e29f33b717b0346e2c549b8805c083ea2ad"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
+      "name": "developtools_smartperf_host",
+      "upstream_url": "https://gitcode.com/openharmony/developtools_smartperf_host.git",
+      "baseline_revisions": [
+        "260b028b289befa8dc2f85b98687d323c7d20fa0"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
+      "name": "device_soc_rockchip",
+      "upstream_url": "https://gitcode.com/openharmony/device_soc_rockchip.git",
+      "baseline_revisions": [
+        "0aa6ba16f89844023137fb84ac03189b30c8780b"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
+      "name": "multimedia_av_codec",
+      "upstream_url": "https://gitcode.com/openharmony/multimedia_av_codec.git",
+      "baseline_revisions": [
+        "e5c525670d1f6622d441c9e5bf975ea0579ea177"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
+      "name": "kernel_linux_6.6",
+      "upstream_url": "https://gitcode.com/openharmony/kernel_linux_6.6.git",
+      "baseline_revisions": [
+        "14c77f1541a53e814d89ad6dea5f7f211f9895a6"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
+      "name": "third_party_mindspore",
+      "upstream_url": "https://gitcode.com/openharmony/third_party_mindspore.git",
+      "baseline_revisions": [
+        "c34a149209fb4dfb81f2af0cc167d7e7be96559b"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "third_party_vk-gl-cts",
+      "upstream_url": "https://gitcode.com/openharmony/third_party_vk-gl-cts.git",
+      "baseline_revisions": [
+        "9536bc43fa66beb1a89fad20030156c49ad4e982"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_src",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_src.git",
+      "baseline_revisions": [
+        "a8168622b056f25c2e68d5f12fe2759bad2d9a44"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_arkweb",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_arkweb.git",
+      "baseline_revisions": [
+        "f3d904432cc1c57468f2b7fe01979d25e0157581"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_cef",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_cef.git",
+      "baseline_revisions": [
+        "6153d21e9a5d6f0a6718757dcf9c5cadf60fe595"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_chrome_test_canvas_bench",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_chrome_test_canvas_bench.git",
+      "baseline_revisions": [
+        "a7b40ea5ae0239517d78845a5fc9b12976bfc732"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_chrome_test_frame_rate",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_chrome_test_frame_rate.git",
+      "baseline_revisions": [
+        "c10272c88463efeef6bb19c9ec07c42bc8fe22b9"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_chrome_test_xr",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_chrome_test_xr.git",
+      "baseline_revisions": [
+        "c58ae99b9ff9e2aa4c524633519570bf33536248"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_docs_website",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_docs_website.git",
+      "baseline_revisions": [
+        "3c47b51f67014f243237e0f73c4572944030b4e5"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_cdm",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_cdm.git",
+      "baseline_revisions": [
+        "a4cbc4325e6de42ead733f2af43c08292d0e65a8"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_quiche",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_quiche.git",
+      "baseline_revisions": [
+        "dd5f831424b2b60023028f7081634022e0cc7535"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_fuzzer_wasm_corpus",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_fuzzer_wasm_corpus.git",
+      "baseline_revisions": [
+        "1df5e50a45db9518a56ebb42cb020a94a090258b"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_angle",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_angle.git",
+      "baseline_revisions": [
+        "34514f8d32961f69378a25957b5fb380ddf42a1f"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_angle_vk_gl_cts",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_angle_vk_gl_cts.git",
+      "baseline_revisions": [
+        "74b1c1d8ea3f30af1b9a76fadcdf9d469afc2a57"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_angle_glmark2",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_angle_glmark2.git",
+      "baseline_revisions": [
+        "6edcf02205fd1e8979dc3f3964257a81959b80c8"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_angle_rapidjson",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_angle_rapidjson.git",
+      "baseline_revisions": [
+        "781a4e667d84aeedbeb8184b7b62425ea66ec59f"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_anonymous-tokens",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_anonymous-tokens.git",
+      "baseline_revisions": [
+        "50e04fb27eacd49a5e2bfde5977ac689e13ebeeb"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_boringssl",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_boringssl.git",
+      "baseline_revisions": [
+        "b94d71f87ff943a617d77f3ff029f9a01a1ec6bc"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_breakpad",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_breakpad.git",
+      "baseline_revisions": [
+        "d0b41ca2a38c7b14c4b7853254eb5bf3b4039691"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_cast_core",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_cast_core.git",
+      "baseline_revisions": [
+        "f5ee589bdaea60418f670fa176be15ccb9a34942"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_catapult",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_catapult.git",
+      "baseline_revisions": [
+        "a202c86635d505fa893d73bad1e220a66bb644e6"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_ced",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_ced.git",
+      "baseline_revisions": [
+        "ba412eaaacd3186085babcd901679a48863c7dd5"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_clang-format",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_clang-format.git",
+      "baseline_revisions": [
+        "c2725e0622e1a86d55f14514f2177a39efea4a0e"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_cld_3",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_cld_3.git",
+      "baseline_revisions": [
+        "b48dc46512566f5a2d41118c8c1116c4f96dc661"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_colorama",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_colorama.git",
+      "baseline_revisions": [
+        "3de9f013df4b470069d03d250224062e8cf15c49"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_compiler-rt",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_compiler-rt.git",
+      "baseline_revisions": [
+        "cb2de163a470f2e9d56ec8a4f912f644378b7191"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_content_analysis_sdk",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_content_analysis_sdk.git",
+      "baseline_revisions": [
+        "9a408736204513e0e95dd2ab3c08de0d95963efc"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_cpu_features",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_cpu_features.git",
+      "baseline_revisions": [
+        "936b9ab5515dead115606559502e3864958f7f6e"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_cpuinfo",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_cpuinfo.git",
+      "baseline_revisions": [
+        "161a9ec374884f4b3e85725cb22e05f9458fdc93"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_crabbyavif",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_crabbyavif.git",
+      "baseline_revisions": [
+        "640d2758f8d2e59d1a55ae0933673f0f65de68c4"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_crc32c",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_crc32c.git",
+      "baseline_revisions": [
+        "d3d60ac6e0f16780bcfcc825385e1d338801a558"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_cros_components",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_cros_components.git",
+      "baseline_revisions": [
+        "7ccdbf60606671c2c057628125908fbfef9bd0c8"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_cros_system_api",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_cros_system_api.git",
+      "baseline_revisions": [
+        "5f1ffac5e855229e27c6e4356ffb189f3010283f"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_crossbench",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_crossbench.git",
+      "baseline_revisions": [
+        "77240be1ccd1dc99b73be332223a8856641a2073"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_web-tests",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_web-tests.git",
+      "baseline_revisions": [
+        "3c76c8201f0732fe9781742229ab8ac43bf90cbf"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_dav1d",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_dav1d.git",
+      "baseline_revisions": [
+        "fcbc3d1b93f91c709293ed9faea8b7cbcac9030b"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_dawn",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_dawn.git",
+      "baseline_revisions": [
+        "ea00c9ce6368b685ee0009e479425977e28b2689"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_directxshadercompiler",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_directxshadercompiler.git",
+      "baseline_revisions": [
+        "3f85295cfc982e5447f9faaa36f345366faca11d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_directx-headers",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_directx-headers.git",
+      "baseline_revisions": [
+        "980971e835876dc0cde415e8f9bc646e64667bf7"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_glfw",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_glfw.git",
+      "baseline_revisions": [
+        "b35641f4a3c62aa86a0b3c983d163bc0fe36026d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_egl-registry",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_egl-registry.git",
+      "baseline_revisions": [
+        "7dea2ed79187cd13f76183c4b9100159b9e3e071"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_opengl-registry",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_opengl-registry.git",
+      "baseline_revisions": [
+        "5bae8738b23d06968e7c3a41308568120943ae77"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_webgpu_cts",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_webgpu_cts.git",
+      "baseline_revisions": [
+        "ecd2f1963e1c4c31beb579e99d6ba144ae1e01b2"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_webgpu-headers",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_webgpu-headers.git",
+      "baseline_revisions": [
+        "079d4e5153eaabc4033584cc399c27f1acbb2548"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_depot_tools",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_depot_tools.git",
+      "baseline_revisions": [
+        "6182daef96f6bcf4a61afcba676e87f871d0423f"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_devtools_frontend",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_devtools_frontend.git",
+      "baseline_revisions": [
+        "31bb4e203f0bf83335578f43e00cccaac9ff0f28"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_dom_distiller_js",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_dom_distiller_js.git",
+      "baseline_revisions": [
+        "b619b54601ad02e4ba396f40ad5cbd8a57b20ef7"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_domato",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_domato.git",
+      "baseline_revisions": [
+        "053714bccbda79cf76dac3fee48ab2b27f21925e"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_dragonbox",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_dragonbox.git",
+      "baseline_revisions": [
+        "6c7c925b571d54486b9ffae8d9d18a822801cbda"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_eigen3",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_eigen3.git",
+      "baseline_revisions": [
+        "49623d0c4e1af3c680845191948d10f6d3e92f8a"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_emoji_segmenter",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_emoji_segmenter.git",
+      "baseline_revisions": [
+        "955936be8b391e00835257059607d7c5b72ce744"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_expat",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_expat.git",
+      "baseline_revisions": [
+        "69d6c054c1bd5258c2a13405a7f5628c72c177c2"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_farmhash",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_farmhash.git",
+      "baseline_revisions": [
+        "816a4ae622e964763ca0862d9dbd19324a1eaf45"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_fast_float",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_fast_float.git",
+      "baseline_revisions": [
+        "cb1d42aaa1e14b09e1452cfdef373d051b8c02a4"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_federated-compute",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_federated-compute.git",
+      "baseline_revisions": [
+        "e51058dfe7888094ecc09cda38bfceffd4d4664b"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_ffmpeg",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_ffmpeg.git",
+      "baseline_revisions": [
+        "089b28673a1a01aafe0d2b8d47da04d2589bf7d0"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_flac",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_flac.git",
+      "baseline_revisions": [
+        "807e251d9f8c5dd6059e547931e9c6a4251967af"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_flatbuffers",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_flatbuffers.git",
+      "baseline_revisions": [
+        "187240970746d00bbd26b0f5873ed54d2477f9f3"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_fontconfig",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_fontconfig.git",
+      "baseline_revisions": [
+        "23b3fc6e58a13d126b9c30fafc9a16f8bd7143e9"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_fp16",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_fp16.git",
+      "baseline_revisions": [
+        "0a603df2a49756f65284625ca58a4db2e789b8bb"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_freetype",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_freetype.git",
+      "baseline_revisions": [
+        "4a3f908f4ef3870837023e1bcaaef90e369192c7"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_fuzztest",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_fuzztest.git",
+      "baseline_revisions": [
+        "7406afb783ff5e7f3a1a66aebb81090622716412"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_fxdiv",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_fxdiv.git",
+      "baseline_revisions": [
+        "63058eff77e11aa15bf531df5dd34395ec3017c8"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_gemmlowp",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_gemmlowp.git",
+      "baseline_revisions": [
+        "16e8662c34917be0065110bfcd9cc27d30f52fdf"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_glslang",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_glslang.git",
+      "baseline_revisions": [
+        "7a47e2531cb334982b2a2dd8513dca0a3de4373d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_benchmark",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_benchmark.git",
+      "baseline_revisions": [
+        "188e8278990a9069ffc84441cb5a024fd0bede37"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_googletest",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_googletest.git",
+      "baseline_revisions": [
+        "4fe3307fb2d9f86d19777c7eb0e4809e9694dde7"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_harfbuzz_ng",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_harfbuzz_ng.git",
+      "baseline_revisions": [
+        "20b8ca9acc661990280bc2c87c27831c7482aa32"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_highway",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_highway.git",
+      "baseline_revisions": [
+        "84379d1c73de9681b54fbe1c035a23c7bd5d272d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_hunspell_dictionaries",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_hunspell_dictionaries.git",
+      "baseline_revisions": [
+        "cccf64a8acc951afe3f47fee023908e55699bc58"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_icu",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_icu.git",
+      "baseline_revisions": [
+        "4652914326450b9674a8f61883c961fecdd611f3"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_ink",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_ink.git",
+      "baseline_revisions": [
+        "11ca89062782d7e5a57741a303a925f510b91015"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_ink-stroke-modeler",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_ink-stroke-modeler.git",
+      "baseline_revisions": [
+        "2cd45e8683025c28fa2efcf672ad46607e8af869"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_instrumented_libraries",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_instrumented_libraries.git",
+      "baseline_revisions": [
+        "69015643b3f68dbd438c010439c59adc52cac808"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_jetstream",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_jetstream.git",
+      "baseline_revisions": [
+        "f88580ef6265b59295f37eb0c6666466b11a0e74"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_jsoncpp",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_jsoncpp.git",
+      "baseline_revisions": [
+        "42e892d96e47b1f6e29844cc705e148ec4856448"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_leveldatabase",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_leveldatabase.git",
+      "baseline_revisions": [
+        "4ee78d7ea98330f7d7599c42576ca99e3c6ff9c5"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libFuzzer",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libFuzzer.git",
+      "baseline_revisions": [
+        "bea408a6e01f0f7e6c82a43121fe3af4506c932e"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libaddressinput",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libaddressinput.git",
+      "baseline_revisions": [
+        "0c7e9434dc08d2f3ee0a912567340b6f207e5488"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libaom",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libaom.git",
+      "baseline_revisions": [
+        "5afceb5c874e7aa278ee524f2fc7f08bbacad1df"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_buildtools_libcpp",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_buildtools_libcpp.git",
+      "baseline_revisions": [
+        "07572e7b169225ef3a999584cba9d9004631ae66"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_buildtools_libcppapi",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_buildtools_libcppapi.git",
+      "baseline_revisions": [
+        "83a852080747b9a362e8f9e361366b7a601f302c"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libdrm",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libdrm.git",
+      "baseline_revisions": [
+        "ad78bb591d02162d3b90890aa4d0a238b2a37cde"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libgav1",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libgav1.git",
+      "baseline_revisions": [
+        "c05bf9be660cf170d7c26bd06bb42b3322180e58"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_libipp",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_libipp.git",
+      "baseline_revisions": [
+        "4be5f77f672a3a9f1bbf3c935fb0ea8b3f86ce61"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libjpeg_turbo",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libjpeg_turbo.git",
+      "baseline_revisions": [
+        "4a25a308a1f30767de80386cfb77a6267be97302"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_liblouis",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_liblouis.git",
+      "baseline_revisions": [
+        "9700847afb92cb35969bdfcbbfbbb74b9c7b3376"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libphonenumber",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libphonenumber.git",
+      "baseline_revisions": [
+        "9d46308f313f2bf8dbce1dfd4f364633ca869ca7"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libprotobuf_mutator",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libprotobuf_mutator.git",
+      "baseline_revisions": [
+        "7bf98f78a30b067e22420ff699348f084f802e12"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libsrtp",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libsrtp.git",
+      "baseline_revisions": [
+        "a52756acb1c5e133089c798736dd171567df11f5"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libsync",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libsync.git",
+      "baseline_revisions": [
+        "fcb40c9ae8ea5738b3a9d5e8df696ef729e17fde"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_buildtools_libunwind",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_buildtools_libunwind.git",
+      "baseline_revisions": [
+        "c65639bf792928e0d38aed822dc34d3e72066a6c"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_libva-fake-driver",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_libva-fake-driver.git",
+      "baseline_revisions": [
+        "a9bcab9cd6b15d4e3634ca44d5e5f7652c612194"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libvpx",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libvpx.git",
+      "baseline_revisions": [
+        "01c36277c0d0e6fbb54ce1f0dde08266cddce748"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libwebm",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libwebm.git",
+      "baseline_revisions": [
+        "8c75fdb5a93e9449272904b68f7baa15e7a4180b"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_libwebp",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_libwebp.git",
+      "baseline_revisions": [
+        "c00d83f6642e7838a12bb03bca94237f03cc2e00"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_libyuv",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_libyuv.git",
+      "baseline_revisions": [
+        "8c791052ce648e45e73ee4467440946bf1d08caa"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_libc",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_libc.git",
+      "baseline_revisions": [
+        "fe97633934c21742a74962d52c17b3bcba7ad824"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_lss",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_lss.git",
+      "baseline_revisions": [
+        "639c8b9a1dbf3aab5030ae04eb2e243f98d3ce8d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_material-color-utilities",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_material-color-utilities.git",
+      "baseline_revisions": [
+        "13434b50dcb64a482cc91191f8cf6151d90f5465"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_minigbm",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_minigbm.git",
+      "baseline_revisions": [
+        "3018207f4d89395cc271278fb9a6558b660885f5"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_nasm",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_nasm.git",
+      "baseline_revisions": [
+        "af5eeeb054bebadfbb79c7bcd100a95e2ad4525f"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_nearby-connections",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_nearby-connections.git",
+      "baseline_revisions": [
+        "0bad8b0c9877f92eeeb550654f1ea51a71a085e4"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_neon_2_sse",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_neon_2_sse.git",
+      "baseline_revisions": [
+        "eb8b80b28f956275e291ea04a7beb5ed8289e872"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_oak",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_oak.git",
+      "baseline_revisions": [
+        "96c00a6c99ac382f3f3a8f376bc7a70890d1adaa"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_openh264",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_openh264.git",
+      "baseline_revisions": [
+        "652bdb7719f30b52b08e506645a7322ff1b2cc6f"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_openscreen",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_openscreen.git",
+      "baseline_revisions": [
+        "c5f78b119a5c68153a41ca0fff8ebf98a87f23be"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_buildtools",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_buildtools.git",
+      "baseline_revisions": [
+        "fba2905150c974240f14aa5334c3e5c93f873032"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_openscreen_tinycbor",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_openscreen_tinycbor.git",
+      "baseline_revisions": [
+        "fc42a049853b802e45f49588f8148fc29d7b4d9c"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_ots",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_ots.git",
+      "baseline_revisions": [
+        "46bea9879127d0ff1c6601b078e2ce98e83fcd33"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_pdfium",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_pdfium.git",
+      "baseline_revisions": [
+        "f467ad7b6de4e6026a8c70f9a4f840fc9a3de4dd"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_perfetto",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_perfetto.git",
+      "baseline_revisions": [
+        "bf7c3ad9e9698ded537c2f068c2b1132ac77a22c"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_protobuf-javascript",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_protobuf-javascript.git",
+      "baseline_revisions": [
+        "e6d763860001ba1a76a63adcff5efb12b1c96024"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_pthreadpool",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_pthreadpool.git",
+      "baseline_revisions": [
+        "d90cd6f1493e09d12c407243f7f331a8cda55efb"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_pyelftools",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_pyelftools.git",
+      "baseline_revisions": [
+        "19b3e610c86fcadb837d252c794cb5e8008826ae"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_pywebsocket3",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_pywebsocket3.git",
+      "baseline_revisions": [
+        "50602a14f1b6da17e0b619833a13addc6ea78bc2"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_quic_trace",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_quic_trace.git",
+      "baseline_revisions": [
+        "352288a06d2c83ae68b5a402b2219f4678be9f39"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_re2",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_re2.git",
+      "baseline_revisions": [
+        "e7aec5985072c1dbe735add802653ef4b36c231a"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_readability",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_readability.git",
+      "baseline_revisions": [
+        "d7949dc47dd9ed9ee1d3b34ffdcf3bce28cde435"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_ruy",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_ruy.git",
+      "baseline_revisions": [
+        "1e6e50872655a73b5250f954d7b9da9a87292fd3"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_search_engines_data",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_search_engines_data.git",
+      "baseline_revisions": [
+        "97355b69daee73d74ac38f2227788458bd95d372"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_securemessage",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_securemessage.git",
+      "baseline_revisions": [
+        "fa07beb12babc3b25e0c5b1f38c16aa8cb6b8f84"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_skia",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_skia.git",
+      "baseline_revisions": [
+        "e742cbf7a397b11aef80c664999b758fb8d01a58"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_smhasher",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_smhasher.git",
+      "baseline_revisions": [
+        "0ff96f7835817a27d0487325b6c16033e2992eb5"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_snappy",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_snappy.git",
+      "baseline_revisions": [
+        "32ded457c0b1fe78ceb8397632c416568d6714a0"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_speedometer",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_speedometer.git",
+      "baseline_revisions": [
+        "e2e2538900938c5d6819e9456bf33d48f806c96c"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_spirv_cross",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_spirv_cross.git",
+      "baseline_revisions": [
+        "b8fcf307f1f347089e3c46eb4451d27f32ebc8d3"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_spirv_headers",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_spirv_headers.git",
+      "baseline_revisions": [
+        "b824a462d4256d720bebb40e78b9eb8f78bbb305"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_spirv_tools",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_spirv_tools.git",
+      "baseline_revisions": [
+        "f410b3c178740f9f5bd28d5b22a71d4bc10acd49"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_sqlite",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_sqlite.git",
+      "baseline_revisions": [
+        "7d348fc79216a09b864ff881d8561a6222301666"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_swiftshader",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_swiftshader.git",
+      "baseline_revisions": [
+        "7de929845e8d30e83be6416a15e76c235bb4784d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_text-fragments-polyfill",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_text-fragments-polyfill.git",
+      "baseline_revisions": [
+        "c036420683f672d685e27415de0a5f5e85bdc23f"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_tflite",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_tflite.git",
+      "baseline_revisions": [
+        "621ffb9c2120c8d1d54a604bfc260a2f83fbec64"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_ukey2",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_ukey2.git",
+      "baseline_revisions": [
+        "0275885d8e6038c39b8a8ca55e75d1d4d1727f47"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps.git",
+      "baseline_revisions": [
+        "327bc9dec2a42806ad78c284829363657bb728dc"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_vulkan_headers",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_vulkan_headers.git",
+      "baseline_revisions": [
+        "234f716cb893a145c6c8d0ca6508954f2aa9f5bc"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_vulkan_loader",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_vulkan_loader.git",
+      "baseline_revisions": [
+        "000ea70d499339da68178b47d0ce2a797844fef2"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_vulkan_tools",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_vulkan_tools.git",
+      "baseline_revisions": [
+        "48b5d246b2d0b1a41ee7ea1b69525ae7bb38a2ae"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_vulkan-utility-libraries",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_vulkan-utility-libraries.git",
+      "baseline_revisions": [
+        "c010c19e796035e92fb3b0462cb887518a41a7c1"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_deps_vulkan_validation_layers",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_deps_vulkan_validation_layers.git",
+      "baseline_revisions": [
+        "5e175a92548d1a507bd81fdc5db6fa1d2572a6ea"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_vulkan_memory_allocator",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_vulkan_memory_allocator.git",
+      "baseline_revisions": [
+        "cb0597213b0fcb999caa9ed08c2f88dc45eb7d50"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_wayland_protocols_gtk",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_wayland_protocols_gtk.git",
+      "baseline_revisions": [
+        "40ebed3a03aef096addc0af09fec4ec529d882a0"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_wayland_protocols_kde",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_wayland_protocols_kde.git",
+      "baseline_revisions": [
+        "0b07950714b3a36c9b9f71fc025fc7783e82926e"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_wayland_protocols_src",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_wayland_protocols_src.git",
+      "baseline_revisions": [
+        "efbc060534be948b63e1f395d69b583eebba3235"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_wayland",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_wayland.git",
+      "baseline_revisions": [
+        "b317806f93aba691cb94e5075e6dc72345dffc34"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_webdriver",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_webdriver.git",
+      "baseline_revisions": [
+        "1e954903022e9386b9acf452c24f4458dd4c4fc1"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_webgl",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_webgl.git",
+      "baseline_revisions": [
+        "c01b768bce4a143e152c1870b6ba99ea6267d2b0"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_webpagereplay",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_webpagereplay.git",
+      "baseline_revisions": [
+        "052833a44dd2f538b85936092bad545b6062e193"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_webrtc",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_webrtc.git",
+      "baseline_revisions": [
+        "0159a7bffb0a54551e9fa5dd25ff81f448419b05"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_weston",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_weston.git",
+      "baseline_revisions": [
+        "bdba2f9adaca673fd58339d8140bc04727ee279d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_wuffs",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_wuffs.git",
+      "baseline_revisions": [
+        "e3f919ccfe3ef542cfc983a82146070258fb57f8"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_third_party_xdg_utils",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_third_party_xdg_utils.git",
+      "baseline_revisions": [
+        "cb54d9db2e535ee4ef13cc91b65a1e2741a94a44"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_xnnpack",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_xnnpack.git",
+      "baseline_revisions": [
+        "d3efd0a2fcd944931416811da6d24222c91ddd9d"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_zstd",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_zstd.git",
+      "baseline_revisions": [
+        "a25c1fc96f431e69abea38f52cb31e6bc074e9f1"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "chromium_v8",
+      "upstream_url": "https://gitcode.com/openharmony-tpc/chromium_v8.git",
+      "baseline_revisions": [
+        "bb352490a41083cfb4fba0fadcb0c5099f4aafa7"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "busmanager_serial_manager",
+      "upstream_url": "https://gitcode.com/openharmony-sig/busmanager_serial_manager.git",
+      "baseline_revisions": [
+        "c05fbbf156230982aa576373da6ee04378b09ca0"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "third_party_openvpn",
+      "upstream_url": "https://github.com/OpenVPN/openvpn.git",
+      "baseline_revisions": [
+        "dc1f569087135894ac2703aeabd7a960ee9452d4"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    },
+    {
+      "name": "qemu_tool_gn",
+      "upstream_url": "https://github.com/timniederhausen/gn.git",
+      "baseline_revisions": [
+        "6e0b557db44b3c164094e57687d20ba036a80667"
+      ],
+      "large_files": "git-lfs",
+      "enabled": false
+    }
+  ]
+}

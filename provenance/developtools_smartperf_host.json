@@ -1,0 +1,9 @@
+{
+  "repository": "openharmony-qemu/developtools_smartperf_host",
+  "qemu_commit": "b0143d3083df8ca5f8c7214e899e310cda4afeb0",
+  "upstream_revision": "260b028b289befa8dc2f85b98687d323c7d20fa0",
+  "hosted_upstream_revision": "3dc69554ba9743806fbc043d14ffbeb091d61f89",
+  "scope": "source_migration_only",
+  "build_validated": false,
+  "runtime_validated": false
+}

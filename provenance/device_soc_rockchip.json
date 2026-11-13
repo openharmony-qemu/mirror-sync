@@ -1,0 +1,9 @@
+{
+  "repository": "openharmony-qemu/device_soc_rockchip",
+  "qemu_commit": "ab0bde7e8c3963f6abd9a588e73cc581f7e78275",
+  "upstream_revision": "0aa6ba16f89844023137fb84ac03189b30c8780b",
+  "hosted_upstream_revision": "b65ad1ce197b2f534ff66b0f7c3f2eb78d78f16f",
+  "scope": "source_migration_only",
+  "build_validated": false,
+  "runtime_validated": false
+}
