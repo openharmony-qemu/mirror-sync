@@ -4,6 +4,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -407,6 +408,53 @@ class MirrorTests(unittest.TestCase):
         self.assertEqual(self.reporter.calls[0][1:4], ('refs/heads/main', racing, incoming))
         self.assertEqual(next(row['status'] for row in result if row['ref'] == 'refs/heads/main'), 'conflict')
         self.assertTrue(sync_module.transfer_refs(self.source, str(self.destination)))
+
+    def test_parallel_object_upload_failure_preserves_the_branch_and_resumes(self):
+        self.entry['bounded_transfer'] = True
+        self.sync()
+        for index in range(9):
+            (self.source / f'asset-{index}').write_bytes(os.urandom(1024))
+        git(self.source, 'add', '.')
+        git(self.source, 'commit', '-m', 'parallel source snapshot')
+        incoming = git(self.source, 'rev-parse', 'HEAD')
+        real_git = sync_module.git
+        barrier = threading.Barrier(4)
+        lock = threading.Lock()
+        calls = 0
+        resumed = 0
+        interrupted = True
+
+        def interrupted_upload(root, *args, **kwargs):
+            nonlocal calls, resumed
+            staging = (args[0] == 'push' and any(sync_module.TRANSFER_PREFIX in arg
+                       and not arg.startswith((':', '--')) for arg in args))
+            if staging and interrupted:
+                with lock:
+                    sequence = calls
+                    calls += 1
+                if sequence < 4:
+                    barrier.wait(timeout=30)
+                if sequence == 0:
+                    return subprocess.CompletedProcess(args, 1, '', 'injected object upload rejection')
+            elif staging:
+                with lock:
+                    resumed += 1
+            return real_git(root, *args, **kwargs)
+
+        with patch.object(sync_module, 'TRANSFER_BYTES', 2048), \
+             patch.object(sync_module, 'git', side_effect=interrupted_upload):
+            with self.assertRaisesRegex(RuntimeError, 'injected object upload rejection'):
+                self.sync()
+            self.assertEqual(calls, 4)
+            self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], self.first)
+            self.assertEqual(len(sync_module.transfer_refs(self.source, str(self.destination))), 3)
+            self.assertEqual(self.reporter.calls, [])
+            interrupted = False
+            result = self.sync()
+        self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], incoming)
+        self.assertEqual(resumed, 2)
+        self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
+        self.assertFalse(any(row['status'] == 'conflict' for row in result))
 
     def test_unexpected_transfer_tag_is_preserved(self):
         self.sync()
