@@ -445,14 +445,17 @@ class MirrorTests(unittest.TestCase):
              patch.object(sync_module, 'git', side_effect=interrupted_upload):
             with self.assertRaisesRegex(RuntimeError, 'injected object upload rejection'):
                 self.sync()
-            self.assertEqual(calls, 4)
+            # Another upload can finish and admit the fifth batch before the
+            # rejection's remote read-back completes. Both schedules are valid.
+            self.assertIn(calls, (4, 5))
             self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], self.first)
-            self.assertEqual(len(sync_module.transfer_refs(self.source, str(self.destination))), 3)
+            accepted = len(sync_module.transfer_refs(self.source, str(self.destination)))
+            self.assertIn(accepted, (3, 4))
             self.assertEqual(self.reporter.calls, [])
             interrupted = False
             result = self.sync()
         self.assertEqual(refs(self.source, str(self.destination))['refs/heads/main'], incoming)
-        self.assertEqual(resumed, 2)
+        self.assertEqual(resumed, 5 - accepted)
         self.assertEqual(sync_module.transfer_refs(self.source, str(self.destination)), {})
         self.assertFalse(any(row['status'] == 'conflict' for row in result))
 
