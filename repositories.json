@@ -1,7 +1,6 @@
 {
   "schema_version": 1,
   "organization": "openharmony-qemu",
-  "qemu_branch": "OpenHarmony-7.0-Release-qemu",
   "repositories": [
     {
       "name": "global_i18n",

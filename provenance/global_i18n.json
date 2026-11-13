@@ -1,9 +1,0 @@
-{
-  "repository": "openharmony-qemu/global_i18n",
-  "qemu_commit": "bbbb95b9e9fec27923dc289b97c4d9831a0ddffc",
-  "upstream_revision": "76e82e29f33b717b0346e2c549b8805c083ea2ad",
-  "hosted_upstream_revision": "2de137865a7fccde02bbae499108cb50da3cb95c",
-  "scope": "source_migration_only",
-  "build_validated": false,
-  "runtime_validated": false
-}
