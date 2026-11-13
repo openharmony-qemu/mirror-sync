@@ -13,6 +13,15 @@
       "enabled": true
     },
     {
+      "name": "developtools_profiler",
+      "upstream_url": "https://gitcode.com/openharmony/developtools_profiler.git",
+      "baseline_revisions": [
+        "d296fc944663c80e1c8f0b0d56bbf5065ad15b58"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
       "name": "developtools_smartperf_host",
       "upstream_url": "https://gitcode.com/openharmony/developtools_smartperf_host.git",
       "baseline_revisions": [
@@ -31,6 +40,15 @@
       "enabled": true
     },
     {
+      "name": "multimedia_audio_framework",
+      "upstream_url": "https://gitcode.com/openharmony/multimedia_audio_framework.git",
+      "baseline_revisions": [
+        "6932fa64335b8272ca4a59de7808ab0d6c9eae7a"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
       "name": "multimedia_av_codec",
       "upstream_url": "https://gitcode.com/openharmony/multimedia_av_codec.git",
       "baseline_revisions": [
@@ -44,6 +62,15 @@
       "upstream_url": "https://gitcode.com/openharmony/kernel_linux_6.6.git",
       "baseline_revisions": [
         "14c77f1541a53e814d89ad6dea5f7f211f9895a6"
+      ],
+      "large_files": "git-lfs",
+      "enabled": true
+    },
+    {
+      "name": "xts_acts",
+      "upstream_url": "https://gitcode.com/openharmony/xts_acts.git",
+      "baseline_revisions": [
+        "12ed38d7aec9c680ed1510a77a96efcc7b101489"
       ],
       "large_files": "git-lfs",
       "enabled": true

@@ -26,7 +26,9 @@
 
 `repositories.json` 来自 QEMU 7.0 的锁定源码清单，包括 OHOS 缺失镜像、SIG、TPC 和外部源。
 `enabled: false` 表示目标仓库和授权仍待迁移，不参与定时任务。
-已有 OpenHarmony GitHub fork 不纳入这个独立镜像清单。
+大多数 OpenHarmony GitHub fork 由源清单单独维护。已确认缺失锁定 7.0 提交的
+`developtools_profiler`、`multimedia_audio_framework`、`xts_acts` 则加入本清单，
+从官方 GitCode 恢复分支；保留已有 fork 和分支，同样禁止强制覆盖。
 TPC 使用 GitCode 官方源，避免依赖已检查过、缺失所需版本的 GitHub TPC 镜像。
 
 组织禁用了 deploy key，因此使用 GitHub App 或限定目标仓库的 fine-grained PAT。
