@@ -25,7 +25,7 @@
 
 ## 配置
 
-`repositories.json` 定义镜像目标：
+`repositories.json` 仅定义存在 QEMU 补丁且上游不在 `https://github.com/openharmony` 托管的 15 个镜像目标（未打补丁的组件直接在清单中使用官方上游地址，不在组织内保留镜像或 fork）：
 
 | 字段 | 用途 |
 | --- | --- |
